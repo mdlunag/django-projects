@@ -1,0 +1,31 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light rounded" style="background-color:white !important;">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarData" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarData">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link {% if dashboard_disabled %}disabled{% endif %}" id="inicio" href="{% url 'overview_dashboard' %}">Inicio</a>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="dropdown09" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Configuración
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdown09">
+                <li><a class="dropdown-item {% if etiquetas_disabled %}disabled{% endif %}" id="etiquetas" href="{% url 'lista_etiquetas'%}">Etiquetas</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'logout' %}">Logout <span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Logo a la derecha -->
+    <a class="navbar-brand ml-auto" href="{% url 'overview_dashboard' %}"><img class="logo" src="{% static 'moneitas-logo.png' %}" alt="Logo"></a>
+</nav>

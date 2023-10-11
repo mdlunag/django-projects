@@ -1,0 +1,66 @@
+/* Agregar estilos para dispositivos móviles */
+@media screen and (max-width: 768px) {
+    .logo{
+        width: 7em;
+    }
+
+    /* Estilo para el contenedor principal */
+    .dashboard-container {
+        max-width: 95%; /* Reducir el ancho máximo en dispositivos móviles */
+        margin: 0 auto; /* Centrar el contenedor en la pantalla */
+        width:95%;
+    }
+
+    /* Estilo para el título */
+    h2 {
+        font-size: 24px; /* Reducir el tamaño del título */
+    }
+
+    h4 {
+        font-size: 19px; /* Reducir el tamaño del título */
+    }
+
+
+    /* Estilo para el botón de estadísticas */
+    form {
+        margin: 10px 0; /* Agregar espacio entre el formulario y los elementos anteriores */
+    }
+
+    select {
+        width: 100%; /* Hacer que el select ocupe el ancho completo */
+    }
+
+    button[type="submit"] {
+        display: block; /* Hacer que el botón ocupe todo el ancho disponible */
+        margin: 10px auto; /* Centrar el botón horizontalmente */
+    }
+
+    /* Estilo para los elementos del dashboard */
+    .dashboard-item {
+        width: 100%; /* Hacer que los elementos del dashboard ocupen el ancho completo */
+        margin: 10px 0; /* Agregar espacio entre los elementos del dashboard */
+        padding: 10px; /* Aumentar el espacio interno */
+    }
+
+    /* Estilo para la tabla de registros */
+    .registros-table {
+        font-size: 14px; /* Reducir el tamaño de fuente de la tabla */
+    }
+
+    /* Estilo para las celdas de la tabla en dispositivos móviles */
+    .registros-table td,
+    .registros-table th {
+        padding: 6px; /* Reducir el espacio entre las celdas */
+    }
+
+    /* Estilo para el botón de eliminar */
+    .fa-trash {
+        font-size: 20px; /* Aumentar el tamaño del icono de eliminación */
+        margin-right: 5px; /* Agregar espacio entre el icono y el checkbox */
+    }
+
+    /* Estilo para el botón "Crear Registro Financiero" */
+    .btn-crear {
+        font-size: 16px; /* Aumentar el tamaño del botón */
+    }
+}

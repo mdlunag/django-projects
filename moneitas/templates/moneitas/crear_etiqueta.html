@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Ingresos y Gastos</title>
+    <!-- Agrega el enlace al CSS de Bootstrap (asegúrate de tener Bootstrap instalado) -->
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles_phone.css' %}">
+    <link rel="icon" href="{% static 'only-logo.png' %}" type="image/png">
+    <!-- Agrega el enlace a los archivos JS de Bootstrap (jQuery y Popper.js son necesarios) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+</head>
+
+<body class="d-flex  align-items-center mt-custom">
+    <!-- Contenido centrado -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-6">
+                <a href="{% url 'lista_etiquetas' %}" class="btn btn-secondary mb-3">Atrás</a>
+            </div>
+            <div class="col-6 text-right">
+                <img src="{% static 'moneitas-logo.png' %}" alt="Mi Logotipo" class="logo" class="align-right">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <h1 class="mb-4">Etiqueta</h1>
+                <form method="post" id="etiqueta-form">
+                    {% csrf_token %}
+                    <!-- Utiliza el componente btn-group para el botón tipo toggle -->
+                    <div class="mb-3">
+                        <div class="btn-group" data-toggle="buttons">
+                            <label class="btn btn-primary btn-ingreso">
+                                <input type="radio" id="tipo-ingreso" name="tipo" value="ingreso" required {% if tipo == 'ingreso' %}checked{% endif %}> Ingreso
+                            </label>
+                            <label class="btn btn-primary btn-gasto">
+                                <input type="radio" id="tipo-gasto" name="tipo" value="gasto" {% if tipo == 'gasto' %}checked{% endif %}> Gasto
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Resto de los campos -->
+                    <p>
+                        <label for="id_nombre">Nombre:</label>
+                        <input type="text" name="nombre" class="rounded-pill" required="" id="id_nombre" value="{{nombre}}">
+                    </p>
+
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

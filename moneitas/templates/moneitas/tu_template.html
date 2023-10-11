@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Ingresos y Gastos</title>
+    <!-- Agrega el enlace al CSS de Bootstrap (asegúrate de tener Bootstrap instalado) -->
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles_phone.css' %}">
+    <link rel="icon" href="{% static 'only-logo.png' %}" type="image/png">
+    <!-- Agrega el enlace a los archivos JS de Bootstrap (jQuery y Popper.js son necesarios) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+</head>
+
+<body class="d-flex  align-items-center mt-custom">
+    <!-- Contenido centrado -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-6">
+                <a href="{% url 'overview_dashboard' %}" class="btn btn-secondary mb-3">Atrás</a>
+            </div>
+            <div class="col-6 text-right">
+                <img src="{% static 'moneitas-logo.png' %}" alt="Mi Logotipo" class="logo" class="align-right">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <h1 class="mb-4">Registro de Ingresos y Gastos</h1>
+                <form method="post" id="registro-financiero-form">
+                    {% csrf_token %}
+                    <!-- Utiliza el componente btn-group para el botón tipo toggle -->
+                    <div class="mb-3">
+                        <div class="btn-group" data-toggle="buttons">
+                            <label class="btn btn-primary btn-ingreso">
+                                <input type="radio" id="tipo-ingreso" name="tipo" value="ingreso" required {% if form.tipo.value == 'ingreso' %}checked{% endif %}> Ingreso
+                            </label>
+                            <label class="btn btn-primary btn-gasto">
+                                <input type="radio" id="tipo-gasto" name="tipo" value="gasto" {% if form.tipo.value == 'gasto' %}checked{% endif %}> Gasto
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Resto de los campos -->
+                    <p>
+                        <label for="{{ form.monto.id_for_label }}">Monto:</label>
+                        {{ form.monto }}
+                    </p>
+                    <p>
+                        <label for="{{ form.fecha.id_for_label }}">Fecha:</label>
+                        {{ form.fecha }}
+                    </p>
+                    <p>
+                        <label for="{{ form.etiqueta_existente.id_for_label }}">Selecciona una etiqueta:</label>
+                        {{ form.etiqueta_existente }}
+                    </p>
+                    <p>
+                        <label for="{{ form.etiqueta_personalizada.id_for_label }}">o crea una nueva etiqueta (opcional):</label>
+                        {{ form.etiqueta_personalizada }}
+                    </p>
+
+                    <!-- Campo "Notas" al final -->
+                    <div class="mb-3">
+                        <label for="id_nota" class="form-label">Notas:</label>
+                        <input type="text" class="rounded-pill" id="id_nota" name="nota"value="{{ form.nota.value }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
+
+
+<script>
+$(document).ready(function() {
+    // Función para cargar las etiquetas disponibles según el tipo seleccionado
+    function cargarEtiquetasDisponibles(tipoSeleccionado, etiquetaPlaceholder) {
+        $.ajax({
+            url: '/moneitas/obtener_etiquetas/',  // Cambia la URL a la que corresponda en tu proyecto
+            data: {'tipo': tipoSeleccionado},
+            dataType: 'json',
+            success: function(data) {
+                // Actualiza las opciones del campo de etiquetas
+                var etiquetasSelect = $('#id_etiqueta_existente');
+                etiquetasSelect.empty();
+                etiquetasSelect.append(etiquetaPlaceholder);
+                $.each(data.etiquetas, function(index, etiqueta) {
+                    etiquetasSelect.append($('<option></option>').attr('value', etiqueta.id).text(etiqueta.nombre));
+                });
+            }
+        });
+    }
+
+    var etiquetaPlaceholder = $('#id_etiqueta_existente')[0][0];
+
+     // Detecta clic en botón de Ingreso
+    $('.btn-ingreso').click(function() {
+        cargarEtiquetasDisponibles('ingreso', etiquetaPlaceholder);
+    });
+
+    // Detecta clic en botón de Gasto
+    $('.btn-gasto').click(function() {
+        cargarEtiquetasDisponibles('gasto', etiquetaPlaceholder);
+    });
+
+});
+</script>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

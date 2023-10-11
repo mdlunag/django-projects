@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <title>Todo App</title>
+    {% load static %}
+
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="{% static 'todo.css' %}" type="text/css" media="screen" charset="utf-8">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+
+
+    <link rel="icon" href="{% static 'only-logo.png' %}" type="image/png">
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  </head>
+  <body>
+
+    <div class="dashboard-content">
+        <div class="dashboard-container">
+            {% include 'moneitas/navbar.html' %}
+
+            <p class="todo">
+                <label class="todo" for="new-task">Add Item</label><input class="todo" id="new-task" type="text">
+                <button id="add" class="todo">Add</button>
+            </p>
+
+            <h3 class="todo">Todo</h3>
+            <ul class="todo" id="incomplete-tasks">
+
+            </ul>
+
+            <h3 class="todo">Completed</h3>
+            <ul class="todo" id="completed-tasks">
+
+            </ul>
+
+            <script type="text/javascript" src="{% static 'todo.js' %}"></script>
+
+</div>
+</div>
+  </body>
+</html>

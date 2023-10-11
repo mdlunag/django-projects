@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles_login.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+    <!-- toggle password !-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+
+    <link rel="icon" href="{% static 'only-logo.png' %}" type="image/png">
+
+</head>
+<body>
+
+    <div class="wrapper bg-white">
+        <div class="h2 text-center"><img  src="{% static 'moneitas-logo.png' %}"></div>
+        <div class="h4 text-muted text-center pt-2">Enter your login details</div>
+        <form class="pt-3" method="post">
+            {% csrf_token %}
+            <div class="form-group py-2">
+                <div class="input-field"> <span class="far fa-user p-2"></span> <input type="text" id="username" name="username" placeholder="Username or Email Address" required class=""> </div>
+            </div>
+            <div class="form-group py-1 pb-2">
+                <div class="input-field"> <span class="fas fa-lock p-2"></span>
+                    <input type="password" id="password1" name="password1" placeholder="Enter your Password" required class="">
+                    <i class="btn bg-white text-muted far fa-eye-slash" id="togglePassword1" style="margin-left: -30px; cursor: pointer;"></i>
+                </div>
+            </div>
+            <div class="form-group py-1 pb-2">
+                <div class="input-field"> <span class="fas fa-lock p-2"></span>
+                    <input type="password" id="password2" name="password2" placeholder="Confirm your Password" required class="">
+                    <i class="btn bg-white text-muted far fa-eye-slash" id="togglePassword2" style="margin-left: -30px; cursor: pointer;"></i>
+                </div>
+                <script>
+                      const togglePassword1 = document.querySelector('#togglePassword1');
+                      const togglePassword2 = document.querySelector('#togglePassword2');
+
+                      const password1 = document.querySelector('#password1');
+                      const password2 = document.querySelector('#password2');
+
+                      togglePassword1.addEventListener('click', function (e) {
+                        // toggle the type attribute
+                        const type = password1.getAttribute('type') === 'password' ? 'text' : 'password';
+                        password1.setAttribute('type', type);
+                        // toggle the eye slash icon
+                        this.classList.toggle('fa-eye');
+                    });
+
+                    togglePassword2.addEventListener('click', function (e) {
+                        // toggle the type attribute
+                        const type = password2.getAttribute('type') === 'password' ? 'text' : 'password';
+                        password2.setAttribute('type', type);
+                        // toggle the eye slash icon
+                        this.classList.toggle('fa-eye');
+                    });
+                </script>
+            <button type="submit" class="btn btn-block text-center my-3">Register</button>
+            <p>Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión aquí</a></p>
+            </div>
+
+        </form>
+    </div>
+
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            <strong>Error:</strong> Por favor, corrige los siguientes errores.
+            <ul>
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <li>{{ field|capfirst }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+</body>
+</html>
+
+
