@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import RegistroFinanciero
+from .models import Task
 from .forms import RegistroFinancieroForm
 from .forms import FiltroDashboardForm
 from .models import Etiqueta
@@ -20,6 +21,9 @@ from django.http import JsonResponse
 def todo(request):
     tasks = Task.objects
     if request.method == 'POST':
+        nombre = request.POST.get('nombre')
+        task = Task(nombre=nombre, state="INCOMPLETE")
+        task.save()
         # Procesar el formulario de eliminación
         for task in tasks:
             if request.POST.get(f"eliminar_{task.id}") == 'on':
