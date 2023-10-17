@@ -1,40 +1,88 @@
-from django.shortcuts import render, redirect
-from .models import RegistroFinanciero
-from .models import Task
-from .forms import RegistroFinancieroForm
-from .forms import FiltroDashboardForm
-from .models import Etiqueta
-from django.db.models import Sum
+from .models import RegistroFinanciero, Task, Etiqueta
+from .forms import RegistroFinancieroForm, FiltroDashboardForm
+
 from calendar import month_name
-from django.urls import reverse
 from datetime import date, timedelta
-from django.contrib.auth import logout
-from django.contrib.auth import login, authenticate
+
+from django.db.models import Sum
+from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import get_user_model
 from django.contrib import messages
-from django.contrib.auth.models import User  # Importa el modelo de usuario de Django
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.urls import reverse
+
+#Django REST Framework
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from .serializers import TaskSerializer
+
 
 #To Do list
 def todo(request):
-    tasks = Task.objects
+    tasks_todo = Task.objects.filter(state='incomplete')
+    tasks_done = Task.objects.filter(state='complete')
     if request.method == 'POST':
         nombre = request.POST.get('nombre')
         task = Task(nombre=nombre, state="INCOMPLETE")
         task.save()
         # Procesar el formulario de eliminación
-        for task in tasks:
+        for task in Task.objects.all():
             if request.POST.get(f"eliminar_{task.id}") == 'on':
                 task.delete()
         return redirect('todo')
+
     return render(request, 'moneitas/to_do.html', {
-        'tasks': tasks,
+        'tasks_todo': tasks_todo,
+        'tasks_done': tasks_done,
         'todo_disabled': True,
         },)
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])  # Aplica la verificación de autenticación solo a esta función
+def create_task(request):
+    if request.method == 'POST':
+        serializer = TaskSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])  # Aplica la verificación de autenticación solo a esta función
+def edit_task(request, task_id):
+    try:
+        task = Task.objects.get(id=task_id)
+    except Task.DoesNotExist:
+        return Response({'error': 'La tarea no existe'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PATCH':
+        serializer = TaskSerializer(task, data=request.data,partial=True)
+        print(request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_task(request, task_id):
+    try:
+        task = Task.objects.get(id=task_id)
+    except Task.DoesNotExist:
+        return Response({'error': 'La tarea no existe'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'DELETE':
+        task.delete()
+        return Response({'message': 'Tarea eliminada exitosamente'}, status=status.HTTP_204_NO_CONTENT)
+
+
 #Etiquetas
+@login_required
 def obtener_etiquetas(request):
     tipo = request.GET.get('tipo')
     print(tipo)
@@ -42,6 +90,7 @@ def obtener_etiquetas(request):
     print(etiquetas)
     return JsonResponse({'etiquetas': list(etiquetas)})
 
+@login_required
 def lista_etiquetas(request):
     etiquetas = Etiqueta.objects.filter(user=request.user)
     if request.method == 'POST':
@@ -55,7 +104,7 @@ def lista_etiquetas(request):
         'etiquetas_disabled': True,
         },)
 
-
+@login_required
 def crear_etiqueta(request, editar=None):
     if request.method == 'POST':
 
@@ -88,7 +137,7 @@ def crear_etiqueta(request, editar=None):
 
     return render(request, 'moneitas/crear_etiqueta.html')
 
-#Registro
+#Login/SignIn
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -121,7 +170,8 @@ def user_logout(request):
     logout(request)
     return redirect('login')
 
-
+#Registro Financiero
+@login_required
 def crear_registro_financiero(request, editar=None):
     if request.method == 'POST':
         form = RegistroFinancieroForm(request.POST, user=request.user)
@@ -178,7 +228,7 @@ def crear_registro_financiero(request, editar=None):
     else:
         form = RegistroFinancieroForm(initial={'fecha': date.today(), 'nota':''}, user=request.user)  # Prellenar la fecha con la fecha actual
 
-    return render(request, 'moneitas/tu_template.html', {'form': form})
+    return render(request, 'moneitas/crear_registro_financiero.html', {'form': form})
 
 from django.db.models import Q
 

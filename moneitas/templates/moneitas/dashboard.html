@@ -1,180 +1,145 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Dashboard de Finanzas</title>
-    {% load static %}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-
-    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'styles_phone.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'style_delete.css' %}">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+{% extends "moneitas/base_template.html" %}
 
 
-    <link rel="icon" href="{% static 'only-logo.png' %}" type="image/png">
+{% block title %}
+    Dashboard de Finanzas
+{% endblock %}
+
+{% block content %}
+<div style="text-align: center;">
+    <h1>Dashboard de Finanzas</h1>
+    </br>
+     <a href="{% url 'crear_registro' %}" class="btn-crear mb-3">Crear Registro Financiero</a>
+    </br>
+
+    <form method="get" id="filtro-form" class="d-flex justify-content-center mt-3">
+        <div class="form-group text-center mx-3">
+            <label for="month">Mes:</label>
+            <select id="month" name="month">
+                {% for month in month_choices %}
+                    <option value="{{ month.0 }}" {% if month.0 == selected_month %}selected{% endif %}>
+                        {{ month.1 }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
 
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+        <div class="form-group text-center mx-3">
+            <label for="{{ filtro_form.tipo.id_for_label }}">Tipo:</label>
+            {{ filtro_form.tipo }}
+        </div>
 
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-
-</head>
-
-<body>
-    {% load static %}
-    <div class="dashboard-content">
-        <div class="dashboard-container">
-            {% load static %}
-            {% include 'moneitas/navbar.html' %}
-
-            <div style="text-align: center;">
-                <h1>Dashboard de Finanzas</h1>
-                </br>
-                 <a href="{% url 'crear_registro' %}" class="btn-crear mb-3">Crear Registro Financiero</a>
-                </br>
-
-                <form method="get" id="filtro-form" class="d-flex justify-content-center mt-3">
-                    <div class="form-group text-center mx-3">
-                        <label for="month">Mes:</label>
-                        <select id="month" name="month">
-                            {% for month in month_choices %}
-                                <option value="{{ month.0 }}" {% if month.0 == selected_month %}selected{% endif %}>
-                                    {{ month.1 }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-
-                    <div class="form-group text-center mx-3">
-                        <label for="{{ filtro_form.tipo.id_for_label }}">Tipo:</label>
-                        {{ filtro_form.tipo }}
-                    </div>
-
-                    <div class="d-flex">
-                        <div class="form-group mx-3">
-                            <label for="{{ filtro_form.etiquetas.id_for_label }}">Etiquetas:</label>
-                            {{ filtro_form.etiquetas }}
-                        </div>
-                    </div>
-                </form>
-
-
-                <script>
-                    const filtroForm = document.getElementById('filtro-form');
-                    const filtroCheckboxes = document.querySelectorAll('input[name="etiquetas"]');
-                    const filtroTipos = document.querySelector('select[name="tipo"]');
-                    // Obtén una referencia al formulario y al select
-                    const monthSelect = document.getElementById('month');
-
-                    // Agrega un evento de cambio al select
-                    monthSelect.addEventListener('change', function () {
-                        // Envía automáticamente el formulario cuando cambie la selección del mes
-                        filtroForm.submit();
-                    });
-
-                    filtroCheckboxes.forEach(checkbox => {
-                        checkbox.addEventListener('change', function () {
-                            filtroForm.submit(); // Envía automáticamente el formulario cuando cambia la selección
-                        });
-                    });
-
-                    filtroTipos.addEventListener('change', function () {
-                        filtroForm.submit(); // Envía automáticamente el formulario cuando cambia la selección
-                    });
-
-
-
-                    $(document).ready(function() {
-                            // Inicializa el campo Select2
-                            $('.django-select2').select2();
-
-                            // Detecta cambios en el campo Select2
-                            $('.django-select2').on('change', function() {
-                                // Envía automáticamente el formulario cuando cambian las selecciones
-                                $('#filtro-form').submit();
-                            });
-                        });
-                </script>
-
-                {{ filtro_form.media.js }}
-
+        <div class="d-flex">
+            <div class="form-group mx-3">
+                <label for="{{ filtro_form.etiquetas.id_for_label }}">Etiquetas:</label>
+                {{ filtro_form.etiquetas }}
             </div>
+        </div>
+    </form>
 
 
-            <div class="dashboard-row">
-                <div class="dashboard-item">
-                    <h4>Ingresos</h4>
-                    <p>{{ incomes }}</p>
-                </div>
-                <div class="dashboard-item">
-                    <h4>Gastos</h4>
-                    <p>{{ expenses }}</p>
-                </div>
-                <div class="dashboard-item">
-                    <h4>Saldo</h4>
-                    <p>{{ balance }}</p>
-                </div>
-            </div>
+    <script>
+        const filtroForm = document.getElementById('filtro-form');
+        const filtroCheckboxes = document.querySelectorAll('input[name="etiquetas"]');
+        const filtroTipos = document.querySelector('select[name="tipo"]');
+        // Obtén una referencia al formulario y al select
+        const monthSelect = document.getElementById('month');
+
+        // Agrega un evento de cambio al select
+        monthSelect.addEventListener('change', function () {
+            // Envía automáticamente el formulario cuando cambie la selección del mes
+            filtroForm.submit();
+        });
+
+        filtroCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                filtroForm.submit(); // Envía automáticamente el formulario cuando cambia la selección
+            });
+        });
+
+        filtroTipos.addEventListener('change', function () {
+            filtroForm.submit(); // Envía automáticamente el formulario cuando cambia la selección
+        });
 
 
-            <form method="post">
-                {% csrf_token %}
-                <table class="registros-table">
-                    <thead>
-                        <tr>
-                            <th>Monto</th>
-                            <th>Fecha</th>
-                            <th>Etiqueta</th>
-                            <th>Nota</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for registro in registros_financieros %}
-                            <tr class="{% if registro.tipo == 'ingreso' %}ingreso{% else %}gasto{% endif %}">
-                                <td>
-                                        {% if registro.tipo == 'gasto' %}-{% endif %}
-                                        {{ registro.monto }}
-                                    </td>                                <td>{{ registro.fecha }}</td>
-                                <td>{{ registro.etiqueta.nombre }}</td>
-                                <td>{{ registro.nota }}</td>
-                                <td style="width: 1%;">
-                                    <div class="d-flex align-items-center">
-                                        <input type="checkbox" name="eliminar_{{ registro.id }}">
-                                        <a class="fas fa-pencil ms-3" href="{% url 'crear_registro' editar=registro.id %}"></a>
-                                    </div>
-                                </td>
 
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                </br>
-                <div class="center-button" >
-                    <button type="submit" class="btn btn-delete">
-                      <span class="mdi mdi-delete mdi-24px"></span>
-                      <span class="mdi mdi-delete-empty mdi-24px"></span>
-                      <span>Eliminar seleccionados</span>
-                    </button>
-                </div>
-            </form>
+        $(document).ready(function() {
+                // Inicializa el campo Select2
+                $('.django-select2').select2();
 
+                // Detecta cambios en el campo Select2
+                $('.django-select2').on('change', function() {
+                    // Envía automáticamente el formulario cuando cambian las selecciones
+                    $('#filtro-form').submit();
+                });
+            });
+    </script>
+
+    {{ filtro_form.media.js }}
+
+    </div>
+
+
+    <div class="dashboard-row">
+        <div class="dashboard-item">
+            <h4>Ingresos</h4>
+            <p>{{ incomes }}</p>
+        </div>
+        <div class="dashboard-item">
+            <h4>Gastos</h4>
+            <p>{{ expenses }}</p>
+        </div>
+        <div class="dashboard-item">
+            <h4>Saldo</h4>
+            <p>{{ balance }}</p>
         </div>
     </div>
-</body>
-</html>
+
+
+    <form method="post">
+        {% csrf_token %}
+        <table class="registros-table">
+            <thead>
+                <tr>
+                    <th>Monto</th>
+                    <th>Fecha</th>
+                    <th>Etiqueta</th>
+                    <th>Nota</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in registros_financieros %}
+                    <tr class="{% if registro.tipo == 'ingreso' %}ingreso{% else %}gasto{% endif %}">
+                        <td>
+                            {% if registro.tipo == 'gasto' %}-{% endif %}
+                            {{ registro.monto }}
+                        </td>
+                        <td>{{ registro.fecha }}</td>
+                        <td>{{ registro.etiqueta.nombre }}</td>
+                        <td>{{ registro.nota }}</td>
+                        <td style="width: 1%;">
+                            <div class="d-flex align-items-center">
+                                <input type="checkbox" name="eliminar_{{ registro.id }}">
+                                <a class="fas fa-pencil ms-3" href="{% url 'crear_registro' editar=registro.id %}"></a>
+                            </div>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </br>
+        <div class="center-button" >
+            <button type="submit" class="btn btn-delete">
+              <span class="mdi mdi-delete mdi-24px"></span>
+              <span class="mdi mdi-delete-empty mdi-24px"></span>
+              <span>Eliminar seleccionados</span>
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
+
