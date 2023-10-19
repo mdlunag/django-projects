@@ -1,2 +1,4 @@
-*.env
-/mysyte/.env
+**/.env
+**/__pycache__
+**.py[co]
+__pycache__
