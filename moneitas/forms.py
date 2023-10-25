@@ -55,5 +55,17 @@ class FiltroDashboardForm(forms.Form):
         label="Tipo de registro",
     )
 
+class FiltroEtiquetasListForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  # Obtiene el usuario de los argumentos
+        super(FiltroEtiquetasListForm, self).__init__(*args, **kwargs)
+
+    tipo = forms.ChoiceField(
+        choices=(('ingreso', 'Ingreso'), ('gasto', 'Gasto'),('', 'Todos')),
+        required=False,
+        label="Tipo de registro",
+    )
+
+
 
 

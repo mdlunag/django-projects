@@ -9,6 +9,22 @@
 <div style="text-align: center;">
     <h1>Etiquetas</h1>
 
+    <form method="get" id="filtro-form" class="d-flex justify-content-center mt-3">
+        <div class="form-group text-center mx-3">
+                <label for="{{ filtro_form.tipo.id_for_label }}">Tipo:</label>
+                {{ filtro_form.tipo }}
+        </div>
+    </form>
+    <script>
+        const filtroForm = document.getElementById('filtro-form');
+        const filtroTipos = document.querySelector('select[name="tipo"]');
+
+        filtroTipos.addEventListener('change', function () {
+            filtroForm.submit(); // Envía automáticamente el formulario cuando cambia la selección
+        });
+
+    </script>
+
     </br>
      <a href="{% url 'crear_etiqueta' %}" class="btn-crear mb-3">Crear Etiqueta</a>
     </br>

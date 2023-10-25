@@ -1,5 +1,5 @@
 {% extends "moneitas/base_template.html" %}
-
+{% load humanize %}
 
 {% block title %}
     Dashboard de Finanzas
@@ -116,7 +116,7 @@
                             {% if registro.tipo == 'gasto' %}-{% endif %}
                             {{ registro.monto }}
                         </td>
-                        <td>{{ registro.fecha }}</td>
+                        <td>{{ registro.fecha|date:"D, M j, Y" }}</td>
                         <td>{{ registro.etiqueta.nombre }}</td>
                         <td>{{ registro.nota }}</td>
                         <td style="width: 1%;">

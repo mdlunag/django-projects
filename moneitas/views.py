@@ -1,5 +1,5 @@
 from .models import RegistroFinanciero, Task, Etiqueta
-from .forms import RegistroFinancieroForm, FiltroDashboardForm
+from .forms import RegistroFinancieroForm, FiltroDashboardForm, FiltroEtiquetasListForm
 
 from calendar import month_name
 from datetime import date, timedelta
@@ -99,9 +99,19 @@ def lista_etiquetas(request):
             if request.POST.get(f"eliminar_{etiqueta.id}") == 'on':
                 etiqueta.delete()
         return redirect('lista_etiquetas')
+
+    # Procesar el formulario de filtro
+    filtro_form = FiltroEtiquetasListForm(request.GET, user=request.user)
+
+    if filtro_form.is_valid():
+        tipo_seleccionado = filtro_form.cleaned_data.get('tipo')
+        if tipo_seleccionado and tipo_seleccionado != '':
+            etiquetas = etiquetas.filter(tipo=tipo_seleccionado)
+
     return render(request, 'moneitas/etiquetas.html', {
         'etiquetas': etiquetas,
         'etiquetas_disabled': True,
+        'filtro_form': filtro_form,
         },)
 
 @login_required
