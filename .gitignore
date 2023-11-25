@@ -2,3 +2,7 @@
 **/__pycache__
 **.py[co]
 __pycache__
+**/migrations/__pycache__
+**.pyc
+migrations/
+moneitas/management

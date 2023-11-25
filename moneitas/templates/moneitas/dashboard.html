@@ -30,6 +30,11 @@
             {{ filtro_form.tipo }}
         </div>
 
+        <div class="form-group text-center mx-3">
+            <label for="{{ filtro_form.metodo.id_for_label }}">Metodo:</label>
+            {{ filtro_form.metodo }}
+        </div>
+
         <div class="d-flex">
             <div class="form-group mx-3">
                 <label for="{{ filtro_form.etiquetas.id_for_label }}">Etiquetas:</label>
@@ -43,6 +48,8 @@
         const filtroForm = document.getElementById('filtro-form');
         const filtroCheckboxes = document.querySelectorAll('input[name="etiquetas"]');
         const filtroTipos = document.querySelector('select[name="tipo"]');
+        const filtroMetodo = document.querySelector('select[name="metodo"]');
+
         // Obtén una referencia al formulario y al select
         const monthSelect = document.getElementById('month');
 
@@ -59,6 +66,10 @@
         });
 
         filtroTipos.addEventListener('change', function () {
+            filtroForm.submit(); // Envía automáticamente el formulario cuando cambia la selección
+        });
+
+        filtroMetodo.addEventListener('change', function () {
             filtroForm.submit(); // Envía automáticamente el formulario cuando cambia la selección
         });
 
@@ -119,6 +130,13 @@
                         <td>{{ registro.fecha|date:"D, M j, Y" }}</td>
                         <td>{{ registro.etiqueta.nombre }}</td>
                         <td>{{ registro.nota }}</td>
+                        <td>
+                            {% if registro.metodo == 'credit_card' %}
+                            <i class="fa-regular fa-credit-card"></i>
+                            {% else %}
+                            <i class="fa-solid fa-money-bill-1"></i>
+                            {% endif %}
+                        </td>
                         <td style="width: 1%;">
                             <div class="d-flex align-items-center">
                                 <input type="checkbox" name="eliminar_{{ registro.id }}">

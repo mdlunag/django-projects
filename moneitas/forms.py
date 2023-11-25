@@ -28,11 +28,10 @@ class RegistroFinancieroForm(forms.ModelForm):
 
     class Meta:
         model = RegistroFinanciero
-        fields = ['tipo', 'monto', 'fecha', 'etiqueta_existente', 'etiqueta_personalizada', 'nota']
+        fields = ['tipo', 'monto', 'fecha', 'etiqueta_existente', 'etiqueta_personalizada', 'nota', 'metodo']
         widgets = {
             'monto': forms.TextInput(attrs={'class': 'rounded-pill'}),
         }
-
 
 
 class FiltroDashboardForm(forms.Form):
@@ -54,6 +53,13 @@ class FiltroDashboardForm(forms.Form):
         required=False,
         label="Tipo de registro",
     )
+
+    metodo = forms.ChoiceField(
+        choices=(('cash', 'Efectivo'), ('credit_card', 'Tarjeta'),('', 'Todos')),
+        required=False,
+        label="Tipo de registro",
+        )
+
 
 class FiltroEtiquetasListForm(forms.Form):
     def __init__(self, *args, **kwargs):

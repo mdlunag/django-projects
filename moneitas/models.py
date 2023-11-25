@@ -11,6 +11,11 @@ STATE_CHOICES = (
         ('complete', 'Done'),
     )
 
+METODO_CHOICES = (
+    ('cash', 'Efectivo'),
+    ('credit_card', 'Tarjeta'),
+    )
+
 class Etiqueta(models.Model):
     nombre = models.CharField(max_length=255, unique=True)
     tipo = models.CharField(max_length=7, choices=TIPO_CHOICES)
@@ -27,6 +32,7 @@ class RegistroFinanciero(models.Model):
     nota = models.TextField(blank=True, null=True)
     eliminar = models.BooleanField(default=False)  # Campo para identificar registros a eliminar
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Relaciona el registro con el usuario
+    metodo = models.CharField(max_length=12, choices=METODO_CHOICES, default='cash')
 
 
     def __str__(self):

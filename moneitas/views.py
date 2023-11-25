@@ -105,6 +105,7 @@ def lista_etiquetas(request):
 
     if filtro_form.is_valid():
         tipo_seleccionado = filtro_form.cleaned_data.get('tipo')
+
         if tipo_seleccionado and tipo_seleccionado != '':
             etiquetas = etiquetas.filter(tipo=tipo_seleccionado)
 
@@ -202,10 +203,12 @@ def crear_registro_financiero(request, editar=None):
             # Asigna el valor del campo tipo según la selección del botón de alternancia.
             tipo = request.POST.get('tipo')
             nota = request.POST.get('nota')
+            metodo = request.POST.get('metodo')
 	        # Crea el registro financiero con la etiqueta asociada.
             registro.etiqueta = etiqueta  # Asocia la etiqueta con el registro financiero
             registro.tipo = tipo
             registro.nota = nota or ''
+            registro.metodo = metodo
             #registro.user= User.objects.get(username='aitor.rife@gmail.com')
             registro.user = request.user
             if editar:
@@ -229,6 +232,7 @@ def crear_registro_financiero(request, editar=None):
         print(registro_editar.tipo)
         form = RegistroFinancieroForm(initial={
             'tipo': 'ingreso' if registro_editar.tipo == 'ingreso' else 'gasto',
+            'metodo': registro_editar.metodo,
             'monto': registro_editar.monto,
             'fecha': registro_editar.fecha,
             'etiqueta_existente': registro_editar.etiqueta or '',
@@ -300,6 +304,10 @@ def overview_dashboard(request):
     if filtro_form.is_valid():
         etiquetas_seleccionadas = filtro_form.cleaned_data.get('etiquetas')
         tipo_seleccionado = filtro_form.cleaned_data.get('tipo')
+        metodo_seleccionado = filtro_form.cleaned_data.get('metodo')
+
+        if metodo_seleccionado and metodo_seleccionado != '':
+            registros_financieros = registros_financieros.filter(metodo=metodo_seleccionado)
 
         if etiquetas_seleccionadas:
             registros_financieros = registros_financieros.filter(etiqueta__in=etiquetas_seleccionadas)
