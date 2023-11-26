@@ -109,7 +109,7 @@ LOGOUT_REDIRECT_URL = 'login'  # Ruta a la página a la que se redirige después
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': env("DB_ENGINE"),
         'NAME': env("DB_NAME"),
         'USER': env("USER"),
         'PASSWORD': env("PASSWORD"),
