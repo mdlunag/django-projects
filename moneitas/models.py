@@ -1,9 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User  # Importa el modelo de usuario de Django
+from django.utils.translation import gettext_lazy as _
 
-TIPO_CHOICES = (
-        ('ingreso', 'Ingreso'),
-        ('gasto', 'Gasto'),
+
+TYPE_CHOICES = (
+        (_('income'), _('Income')),
+        (_('expense'), _('Expense')),
     )
 
 STATE_CHOICES = (
@@ -11,28 +13,28 @@ STATE_CHOICES = (
         ('complete', 'Done'),
     )
 
-METODO_CHOICES = (
-    ('cash', 'Efectivo'),
-    ('credit_card', 'Tarjeta'),
+METHOD_CHOICES = (
+    ('cash', _('Cash')),
+    ('credit_card', _('Card')),
     )
 
-class Etiqueta(models.Model):
-    nombre = models.CharField(max_length=255, unique=True)
-    tipo = models.CharField(max_length=7, choices=TIPO_CHOICES)
+class Label(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    type = models.CharField(max_length=7, choices=TYPE_CHOICES)
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Relaciona el registro con el usuario
 
     def __str__(self):
-        return f"{self.nombre} ({self.tipo})"
+        return f"{self.name} ({self.type})"
 
 class RegistroFinanciero(models.Model):
-    tipo = models.CharField(max_length=7, choices=TIPO_CHOICES)
+    tipo = models.CharField(max_length=7, choices=TYPE_CHOICES)
     monto = models.DecimalField(max_digits=10, decimal_places=2)
     fecha = models.DateField()
-    etiqueta = models.ForeignKey(Etiqueta, on_delete=models.CASCADE, blank=True, null=True)
+    label = models.ForeignKey(Label, on_delete=models.CASCADE, blank=True, null=True)
     nota = models.TextField(blank=True, null=True)
     eliminar = models.BooleanField(default=False)  # Campo para identificar registros a eliminar
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Relaciona el registro con el usuario
-    metodo = models.CharField(max_length=12, choices=METODO_CHOICES, default='cash')
+    metodo = models.CharField(max_length=12, choices=METHOD_CHOICES, default='cash')
 
 
     def __str__(self):

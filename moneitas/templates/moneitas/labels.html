@@ -1,23 +1,23 @@
 {% extends "moneitas/base_template.html" %}
-
+{% load i18n %}
 
 {% block title %}
-    Etiquetas
+{% translate "Labels" %}
 {% endblock %}
 
 {% block content %}
 <div style="text-align: center;">
-    <h1>Etiquetas</h1>
+    <h1>{% translate "Labels" %}</h1>
 
     <form method="get" id="filtro-form" class="d-flex justify-content-center mt-3">
         <div class="form-group text-center mx-3">
-                <label for="{{ filtro_form.tipo.id_for_label }}">Tipo:</label>
-                {{ filtro_form.tipo }}
+                <label for="{{ filtro_form.type.id_for_label }}">{% translate "Type" %}:</label>
+                {{ filtro_form.type }}
         </div>
     </form>
     <script>
         const filtroForm = document.getElementById('filtro-form');
-        const filtroTipos = document.querySelector('select[name="tipo"]');
+        const filtroTipos = document.querySelector('select[name="type"]');
 
         filtroTipos.addEventListener('change', function () {
             filtroForm.submit(); // Envía automáticamente el formulario cuando cambia la selección
@@ -26,28 +26,28 @@
     </script>
 
     </br>
-     <a href="{% url 'crear_etiqueta' %}" class="btn-crear mb-3">Crear Etiqueta</a>
+     <a href="{% url 'create_label' %}" class="btn-crear mb-3">{% translate "Create Label" %}</a>
     </br>
 
     <form method="post">
         {% csrf_token %}
-        <table class="etiquetas-table">
+        <table class="labels-table">
             <thead>
                 <tr>
-                    <th>Nombre</th>
-                    <th>Tipo</th>
+                    <th>{% translate "Name" %}</th>
+                    <th>{% translate "Type" %}</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                {% for etiqueta in etiquetas %}
-                    <tr class="{% if etiqueta.tipo == 'ingreso' %}ingreso{% else %}gasto{% endif %}">
-                        <td>{{ etiqueta.nombre }}</td>
-                        <td>{{ etiqueta.tipo }}</td>
+                {% for label in labels %}
+                    <tr class="{% if label.type == 'income' %}income{% else %}expense{% endif %}">
+                        <td>{{ label.name }}</td>
+                        <td>{{ label.type }}</td>
                         <td style="width: 1%;">
                             <div class="d-flex align-items-center">
-                                <input type="checkbox" name="eliminar_{{ etiqueta.id }}">
-                                <a class="fas fa-pencil ms-3" href="{% url 'crear_etiqueta' editar=etiqueta.id %}"></a>
+                                <input type="checkbox" name="eliminar_{{ label.id }}">
+                                <a class="fas fa-pencil ms-3" href="{% url 'create_label' edit=label.id %}"></a>
                             </div>
                         </td>
 
@@ -60,7 +60,7 @@
             <button type="submit" class="btn btn-delete">
               <span class="mdi mdi-delete mdi-24px"></span>
               <span class="mdi mdi-delete-empty mdi-24px"></span>
-              <span>Eliminar seleccionados</span>
+              <span>{% translate "Delete Selected" %}</span>
             </button>
         </div>
     </form>

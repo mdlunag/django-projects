@@ -13,11 +13,11 @@
     <!-- Utiliza el componente btn-group para el botón tipo toggle -->
     <div class="mb-3">
         <div class="btn-group" data-toggle="buttons">
-            <label class="btn btn-primary btn-ingreso">
-                <input type="radio" id="tipo-ingreso" name="tipo" value="ingreso" required {% if form.tipo.value == 'ingreso' %}checked{% endif %}> Ingreso
+            <label class="btn btn-primary btn-income">
+                <input type="radio" id="tipo-income" name="tipo" value="income" required {% if form.tipo.value == 'income' %}checked{% endif %}> Ingreso
             </label>
-            <label class="btn btn-primary btn-gasto">
-                <input type="radio" id="tipo-gasto" name="tipo" value="gasto" {% if form.tipo.value == 'gasto' %}checked{% endif %}> Gasto
+            <label class="btn btn-primary btn-expense">
+                <input type="radio" id="tipo-expense" name="tipo" value="expense" {% if form.tipo.value == 'expense' %}checked{% endif %}> Gasto
             </label>
         </div>
     </div>
@@ -37,12 +37,12 @@
         {{ form.fecha }}
     </p>
     <p>
-        <label for="{{ form.etiqueta_existente.id_for_label }}">Selecciona una etiqueta:</label>
-        {{ form.etiqueta_existente }}
+        <label for="{{ form.label_existente.id_for_label }}">Selecciona una label:</label>
+        {{ form.label_existente }}
     </p>
     <p>
-        <label for="{{ form.etiqueta_personalizada.id_for_label }}">o crea una nueva etiqueta (opcional):</label>
-        {{ form.etiqueta_personalizada }}
+        <label for="{{ form.label_personalizada.id_for_label }}">o crea una nueva label (opcional):</label>
+        {{ form.label_personalizada }}
     </p>
 
     <!-- Campo "Notas" al final -->
@@ -56,34 +56,34 @@
 
 <script>
 $(document).ready(function() {
-    // Función para cargar las etiquetas disponibles según el tipo seleccionado
-    function cargarEtiquetasDisponibles(tipoSeleccionado, etiquetaPlaceholder) {
+    // Función para cargar las labels disponibles según el tipo seleccionado
+    function cargarEtiquetasDisponibles(tipoSeleccionado, labelPlaceholder) {
         $.ajax({
-            url: '/moneitas/obtener_etiquetas/',  // Cambia la URL a la que corresponda en tu proyecto
+            url: '/moneitas/get_labels/',  // Cambia la URL a la que corresponda en tu proyecto
             data: {'tipo': tipoSeleccionado},
             dataType: 'json',
             success: function(data) {
-                // Actualiza las opciones del campo de etiquetas
-                var etiquetasSelect = $('#id_etiqueta_existente');
-                etiquetasSelect.empty();
-                etiquetasSelect.append(etiquetaPlaceholder);
-                $.each(data.etiquetas, function(index, etiqueta) {
-                    etiquetasSelect.append($('<option></option>').attr('value', etiqueta.id).text(etiqueta.nombre));
+                // Actualiza las opciones del campo de labels
+                var labelsSelect = $('#id_label_existente');
+                labelsSelect.empty();
+                labelsSelect.append(labelPlaceholder);
+                $.each(data.labels, function(index, label) {
+                    labelsSelect.append($('<option></option>').attr('value', label.id).text(label.nombre));
                 });
             }
         });
     }
 
-    var etiquetaPlaceholder = $('#id_etiqueta_existente')[0][0];
+    var labelPlaceholder = $('#id_label_existente')[0][0];
 
      // Detecta clic en botón de Ingreso
-    $('.btn-ingreso').click(function() {
-        cargarEtiquetasDisponibles('ingreso', etiquetaPlaceholder);
+    $('.btn-income').click(function() {
+        cargarEtiquetasDisponibles('income', labelPlaceholder);
     });
 
     // Detecta clic en botón de Gasto
-    $('.btn-gasto').click(function() {
-        cargarEtiquetasDisponibles('gasto', etiquetaPlaceholder);
+    $('.btn-expense').click(function() {
+        cargarEtiquetasDisponibles('expense', labelPlaceholder);
     });
 
 });

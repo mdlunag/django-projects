@@ -1,5 +1,5 @@
 from django import forms
-from .models import RegistroFinanciero, Etiqueta
+from .models import RegistroFinanciero, Label
 from datetime import date
 from django_select2.forms import Select2MultipleWidget
 from django.contrib.auth.forms import UserCreationForm
@@ -12,17 +12,17 @@ class RegistroFinancieroForm(forms.ModelForm):
         super(RegistroFinancieroForm, self).__init__(*args, **kwargs)
         print(user)
         if user:
-            self.fields['etiqueta_existente'].queryset = Etiqueta.objects.filter(user=user)
+            self.fields['label_existente'].queryset = Label.objects.filter(user=user)
 
-    etiqueta_existente = forms.ModelChoiceField(
-        queryset=Etiqueta.objects.all(),
+    label_existente = forms.ModelChoiceField(
+        queryset=Label.objects.all(),
         required=False,
-        empty_label="Elige una etiqueta existente (opcional)"
+        empty_label="Elige una label existente (opcional)"
     )
-    etiqueta_personalizada = forms.CharField(
+    label_personalizada = forms.CharField(
         max_length=255,
         required=False,
-        label="O crea una nueva etiqueta (opcional)"
+        label="O crea una nueva label (opcional)"
     )
 
 
@@ -31,7 +31,7 @@ class RegistroFinancieroForm(forms.ModelForm):
 
     class Meta:
         model = RegistroFinanciero
-        fields = ['tipo', 'monto', 'fecha', 'etiqueta_existente', 'etiqueta_personalizada', 'nota', 'metodo']
+        fields = ['tipo', 'monto', 'fecha', 'label_existente', 'label_personalizada', 'nota', 'metodo']
         widgets = {
             'monto': forms.TextInput(attrs={'class': 'rounded-pill'}),
         }
@@ -42,17 +42,17 @@ class FiltroDashboardForm(forms.Form):
         user = kwargs.pop('user', None)  # Obtiene el usuario de los argumentos
         super(FiltroDashboardForm, self).__init__(*args, **kwargs)
         if user:
-            self.fields['etiquetas'].queryset = Etiqueta.objects.filter(user=user)
+            self.fields['labels'].queryset = Label.objects.filter(user=user)
 
-    etiquetas = forms.ModelMultipleChoiceField(
-        queryset=Etiqueta.objects.all(),
+    labels = forms.ModelMultipleChoiceField(
+        queryset=Label.objects.all(),
         required=False,
         widget=Select2MultipleWidget()
     )
 
 
     tipo = forms.ChoiceField(
-        choices=(('ingreso', 'Ingreso'), ('gasto', 'Gasto'),('', 'Todos')),
+        choices=(('income', 'Ingreso'), ('expense', 'Gasto'),('', 'Todos')),
         required=False,
         label="Tipo de registro",
     )
@@ -64,15 +64,15 @@ class FiltroDashboardForm(forms.Form):
         )
 
 
-class FiltroEtiquetasListForm(forms.Form):
+class FiltroLabelsListForm(forms.Form):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)  # Obtiene el usuario de los argumentos
-        super(FiltroEtiquetasListForm, self).__init__(*args, **kwargs)
+        super(FiltroLabelsListForm, self).__init__(*args, **kwargs)
 
-    tipo = forms.ChoiceField(
-        choices=(('ingreso', 'Ingreso'), ('gasto', 'Gasto'),('', 'Todos')),
+    type = forms.ChoiceField(
+        choices=(('income', _('Income')), ('expense', _('Expense')),('', _('All'))),
         required=False,
-        label="Tipo de registro",
+        label=_("Record Type"),
     )
 
 class UserCreationForm(UserCreationForm):

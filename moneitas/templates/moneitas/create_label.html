@@ -1,0 +1,37 @@
+{% extends "moneitas/base_crear_registro.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Create Label" %}{% endblock %}
+
+{% block back_url %}{% url 'list_labels' %}{% endblock %}
+
+{% block content %}
+
+
+<h1 class="mb-4">{% translate "Label" %}</h1>
+<form method="post" id="label-form">
+    {% csrf_token %}
+    <!-- Utiliza el componente btn-group para el botón type toggle -->
+    <div class="mb-3">
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-primary btn-income">
+                <input type="radio" id="type-income" name="type" value="income" required {% if type == 'income' %}checked{% endif %}>
+                {% translate "Income" %}
+            </label>
+            <label class="btn btn-primary btn-expense">
+                <input type="radio" id="type-expense" name="type" value="expense" {% if type == 'expense' %}checked{% endif %}>
+                {% translate "Expense" %}
+            </label>
+        </div>
+    </div>
+
+    <!-- Resto de los campos -->
+    <p>
+        <label for="id_name">{% translate "Name" %}</label>
+        <input type="text" name="name" class="rounded-pill" required="" id="id_name" value="{{name}}">
+    </p>
+
+    <button type="submit" class="btn btn-primary">{% translate "Save" %}</button>
+</form>
+
+{% endblock %}

@@ -1,12 +1,11 @@
-from .models import RegistroFinanciero, Task, Etiqueta
-from .forms import RegistroFinancieroForm, FiltroDashboardForm, FiltroEtiquetasListForm
+from .models import RegistroFinanciero, Task, Label
+from .forms import RegistroFinancieroForm, FiltroDashboardForm, FiltroLabelsListForm, UserCreationForm
 
 from calendar import month_name
 from datetime import date, timedelta
 
 from django.db.models import Sum
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -83,70 +82,69 @@ def delete_task(request, task_id):
 
 #Etiquetas
 @login_required
-def obtener_etiquetas(request):
-    tipo = request.GET.get('tipo')
-    print(tipo)
-    etiquetas = Etiqueta.objects.filter(tipo=tipo, user=request.user).values('id', 'nombre')
-    print(etiquetas)
-    return JsonResponse({'etiquetas': list(etiquetas)})
+def get_labels(request):
+    type = request.GET.get('type')
+    labels = Label.objects.filter(type=type, user=request.user).values('id', 'name')
+    print(labels)
+    return JsonResponse({'labels': list(labels)})
 
 @login_required
-def lista_etiquetas(request):
-    etiquetas = Etiqueta.objects.filter(user=request.user)
+def list_labels(request):
+    labels = Label.objects.filter(user=request.user)
     if request.method == 'POST':
         # Procesar el formulario de eliminación
-        for etiqueta in etiquetas:
-            if request.POST.get(f"eliminar_{etiqueta.id}") == 'on':
-                etiqueta.delete()
-        return redirect('lista_etiquetas')
+        for label in labels:
+            if request.POST.get(f"eliminar_{label.id}") == 'on':
+                label.delete()
+        return redirect('list_labels')
 
     # Procesar el formulario de filtro
-    filtro_form = FiltroEtiquetasListForm(request.GET, user=request.user)
+    filtro_form = FiltroLabelsListForm(request.GET, user=request.user)
 
     if filtro_form.is_valid():
-        tipo_seleccionado = filtro_form.cleaned_data.get('tipo')
+        selected_type = filtro_form.cleaned_data.get('type')
 
-        if tipo_seleccionado and tipo_seleccionado != '':
-            etiquetas = etiquetas.filter(tipo=tipo_seleccionado)
+        if selected_type and selected_type != '':
+            labels = labels.filter(type=selected_type)
 
-    return render(request, 'moneitas/etiquetas.html', {
-        'etiquetas': etiquetas,
-        'etiquetas_disabled': True,
+    return render(request, 'moneitas/labels.html', {
+        'labels': labels,
+        'labels_disabled': True,
         'filtro_form': filtro_form,
         },)
 
 @login_required
-def crear_etiqueta(request, editar=None):
+def create_label(request, edit=None):
     if request.method == 'POST':
 
-        tipo = request.POST.get('tipo')
-        nombre = request.POST.get('nombre')
+        type = request.POST.get('type')
+        name = request.POST.get('name')
 
-        etiqueta = Etiqueta(nombre=nombre, tipo=tipo) if not editar else Etiqueta.objects.get(id=editar)
+        label = Label(name=name, type=type) if not edit else Label.objects.get(id=edit)
 
         # Asigna el valor del campo tipo según la selección del botón de alternancia.
-        etiqueta.tipo = tipo
-        etiqueta.nombre = nombre
-        etiqueta.user = request.user
+        label.type = type
+        label.name = name
+        label.user = request.user
 
-        #etiqueta.user= User.objects.get(username='aitor.rife@gmail.com')
-        #etiqueta.user = request.user
+        #label.user= User.objects.get(username='aitor.rife@gmail.com')
+        #label.user = request.user
 
-        etiqueta.save()
+        label.save()
 
         # Redirige al usuario a la página del panel de control con el filtro aplicado
-        return redirect(reverse('lista_etiquetas'))
+        return redirect(reverse('list_labels'))
 
-    if editar:
-        etiqueta_editar = Etiqueta.objects.get(id=editar)
+    if edit:
+        label_edit = Label.objects.get(id=edit)
 
-        return render(request, 'moneitas/crear_etiqueta.html', {
-            'tipo': etiqueta_editar.tipo,
-            'nombre': etiqueta_editar.nombre,
+        return render(request, 'moneitas/create_label.html', {
+            'type': label_edit.type,
+            'name': label_edit.name,
             })
 
 
-    return render(request, 'moneitas/crear_etiqueta.html')
+    return render(request, 'moneitas/create_label.html')
 
 #Login/SignIn
 def register(request):
@@ -196,7 +194,7 @@ def crear_registro_financiero(request, editar=None):
                 etiqueta = etiqueta_existente
             elif etiqueta_personalizada:
                 # Crea una nueva etiqueta personalizada.
-                etiqueta = Etiqueta.objects.create(nombre=etiqueta_personalizada, user=request.user, tipo=registro.tipo or request.POST.get('tipo'))
+                etiqueta = Label.objects.create(nombre=etiqueta_personalizada, user=request.user, tipo=registro.tipo or request.POST.get('tipo'))
             else:
                 # Maneja el caso en el que no se proporciona ninguna etiqueta.
                 etiqueta = None
@@ -231,7 +229,7 @@ def crear_registro_financiero(request, editar=None):
         registro_editar = RegistroFinanciero.objects.get(id=editar)
         print(registro_editar.tipo)
         form = RegistroFinancieroForm(initial={
-            'tipo': 'ingreso' if registro_editar.tipo == 'ingreso' else 'gasto',
+            'tipo': 'income' if registro_editar.tipo == 'income' else 'expense',
             'metodo': registro_editar.metodo,
             'monto': registro_editar.monto,
             'fecha': registro_editar.fecha,
@@ -302,15 +300,15 @@ def overview_dashboard(request):
     filtro_form = FiltroDashboardForm(request.GET, user=request.user)
 
     if filtro_form.is_valid():
-        etiquetas_seleccionadas = filtro_form.cleaned_data.get('etiquetas')
+        selected_labels = filtro_form.cleaned_data.get('labels')
         tipo_seleccionado = filtro_form.cleaned_data.get('tipo')
         metodo_seleccionado = filtro_form.cleaned_data.get('metodo')
 
         if metodo_seleccionado and metodo_seleccionado != '':
             registros_financieros = registros_financieros.filter(metodo=metodo_seleccionado)
 
-        if etiquetas_seleccionadas:
-            registros_financieros = registros_financieros.filter(etiqueta__in=etiquetas_seleccionadas)
+        if selected_labels:
+            registros_financieros = registros_financieros.filter(label__in=selected_labels)
 
         if tipo_seleccionado and tipo_seleccionado != '':
             registros_financieros = registros_financieros.filter(tipo=tipo_seleccionado)
@@ -318,8 +316,8 @@ def overview_dashboard(request):
     if request.user.username != 'admin':
         registros_financieros = registros_financieros.filter(user=request.user)
 
-    incomes = registros_financieros.filter(tipo='ingreso').aggregate(Sum('monto'))['monto__sum'] or 0
-    expenses = registros_financieros.filter(tipo='gasto').aggregate(Sum('monto'))['monto__sum'] or 0
+    incomes = registros_financieros.filter(tipo='income').aggregate(Sum('monto'))['monto__sum'] or 0
+    expenses = registros_financieros.filter(tipo='expense').aggregate(Sum('monto'))['monto__sum'] or 0
 
     # Calcular el saldo total
     balance = incomes - expenses
