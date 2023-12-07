@@ -4,3 +4,4 @@
     * Use of Django Rest Framework
     * Bootstrap
     * CSS
+    * Translations
