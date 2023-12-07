@@ -17,12 +17,12 @@ class RegistroFinancieroForm(forms.ModelForm):
     label_existente = forms.ModelChoiceField(
         queryset=Label.objects.all(),
         required=False,
-        empty_label="Elige una label existente (opcional)"
+        empty_label="Elige una etiqueta existente (opcional)"
     )
     label_personalizada = forms.CharField(
         max_length=255,
         required=False,
-        label="O crea una nueva label (opcional)"
+        label="O crea una nueva etiqueta (opcional)"
     )
 
 

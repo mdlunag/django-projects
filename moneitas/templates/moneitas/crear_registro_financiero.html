@@ -37,11 +37,11 @@
         {{ form.fecha }}
     </p>
     <p>
-        <label for="{{ form.label_existente.id_for_label }}">Selecciona una label:</label>
+        <label for="{{ form.label_existente.id_for_label }}">Selecciona una etiqueta:</label>
         {{ form.label_existente }}
     </p>
     <p>
-        <label for="{{ form.label_personalizada.id_for_label }}">o crea una nueva label (opcional):</label>
+        <label for="{{ form.label_personalizada.id_for_label }}">o crea una nueva etiqueta (opcional):</label>
         {{ form.label_personalizada }}
     </p>
 
@@ -60,7 +60,7 @@ $(document).ready(function() {
     function cargarEtiquetasDisponibles(tipoSeleccionado, labelPlaceholder) {
         $.ajax({
             url: '/moneitas/get_labels/',  // Cambia la URL a la que corresponda en tu proyecto
-            data: {'tipo': tipoSeleccionado},
+            data: {'type': tipoSeleccionado},
             dataType: 'json',
             success: function(data) {
                 // Actualiza las opciones del campo de labels
@@ -68,7 +68,7 @@ $(document).ready(function() {
                 labelsSelect.empty();
                 labelsSelect.append(labelPlaceholder);
                 $.each(data.labels, function(index, label) {
-                    labelsSelect.append($('<option></option>').attr('value', label.id).text(label.nombre));
+                    labelsSelect.append($('<option></option>').attr('value', label.id).text(label.name));
                 });
             }
         });

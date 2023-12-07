@@ -84,9 +84,11 @@ def delete_task(request, task_id):
 @login_required
 def get_labels(request):
     type = request.GET.get('type')
-    labels = Label.objects.filter(type=type, user=request.user).values('id', 'name')
+    labels = Label.objects.filter(type=type)
+    if request.user.username != 'admin':
+        labels = labels.filter(user=request.user)
     print(labels)
-    return JsonResponse({'labels': list(labels)})
+    return JsonResponse({'labels': list(labels.values('id', 'name'))})
 
 @login_required
 def list_labels(request):
