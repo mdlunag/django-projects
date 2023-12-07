@@ -2,6 +2,9 @@ from django import forms
 from .models import RegistroFinanciero, Etiqueta
 from datetime import date
 from django_select2.forms import Select2MultipleWidget
+from django.contrib.auth.forms import UserCreationForm
+from django.utils.translation import gettext_lazy as _
+
 
 class RegistroFinancieroForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -71,6 +74,13 @@ class FiltroEtiquetasListForm(forms.Form):
         required=False,
         label="Tipo de registro",
     )
+
+class UserCreationForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super(UserCreationForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget = forms.TextInput(attrs={'placeholder': _("Username or Email Address")})
+        self.fields['password1'].widget = forms.PasswordInput(attrs={'placeholder': _("Enter your Password")})
+        self.fields['password2'].widget = forms.PasswordInput(attrs={'placeholder': _("Confirm your Password")})
 
 
 
