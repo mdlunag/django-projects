@@ -43,7 +43,9 @@
                 {% for label in labels %}
                     <tr class="{% if label.type == 'income' %}income{% else %}expense{% endif %}">
                         <td>{{ label.name }}</td>
-                        <td>{{ label.type }}</td>
+                        <td>
+                            {{ label.get_type_display }}
+                        </td>
                         <td style="width: 1%;">
                             <div class="d-flex align-items-center">
                                 <input type="checkbox" name="eliminar_{{ label.id }}">

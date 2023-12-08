@@ -188,15 +188,15 @@ def crear_registro_financiero(request, editar=None):
         form = RegistroFinancieroForm(request.POST, user=request.user)
         if form.is_valid():
             registro = form.save(commit=False) if not editar else RegistroFinanciero.objects.get(id=editar)
-            etiqueta_existente = form.cleaned_data['etiqueta_existente']
-            etiqueta_personalizada = form.cleaned_data['etiqueta_personalizada']
+            etiqueta_existente = form.cleaned_data['label_existente']
+            etiqueta_personalizada = form.cleaned_data['label_personalizada']
 
             # Verifica si se seleccionó una etiqueta existente o se proporcionó una etiqueta personalizada.
             if etiqueta_existente:
                 etiqueta = etiqueta_existente
             elif etiqueta_personalizada:
                 # Crea una nueva etiqueta personalizada.
-                etiqueta = Label.objects.create(nombre=etiqueta_personalizada, user=request.user, tipo=registro.tipo or request.POST.get('tipo'))
+                etiqueta = Label.objects.create(name=etiqueta_personalizada, user=request.user, type=registro.tipo or request.POST.get('tipo'))
             else:
                 # Maneja el caso en el que no se proporciona ninguna etiqueta.
                 etiqueta = None
@@ -205,7 +205,7 @@ def crear_registro_financiero(request, editar=None):
             nota = request.POST.get('nota')
             metodo = request.POST.get('metodo')
 	        # Crea el registro financiero con la etiqueta asociada.
-            registro.etiqueta = etiqueta  # Asocia la etiqueta con el registro financiero
+            registro.label = etiqueta  # Asocia la etiqueta con el registro financiero
             registro.tipo = tipo
             registro.nota = nota or ''
             registro.metodo = metodo
@@ -235,7 +235,7 @@ def crear_registro_financiero(request, editar=None):
             'metodo': registro_editar.metodo,
             'monto': registro_editar.monto,
             'fecha': registro_editar.fecha,
-            'etiqueta_existente': registro_editar.etiqueta or '',
+            'label_existente': registro_editar.label or '',
             'nota':  registro_editar.nota,
 
             })

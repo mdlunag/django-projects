@@ -3,10 +3,6 @@ from django.contrib.auth.models import User  # Importa el modelo de usuario de D
 from django.utils.translation import gettext_lazy as _
 
 
-TYPE_CHOICES = (
-        (_('income'), _('Income')),
-        (_('expense'), _('Expense')),
-    )
 
 STATE_CHOICES = (
         ('incomplete', 'TO DO'),
@@ -18,16 +14,20 @@ METHOD_CHOICES = (
     ('credit_card', _('Card')),
     )
 
+class Type(models.TextChoices):
+        INCOME = 'income', _('Income')
+        EXPENSE = 'expense', _('Expense')
+
 class Label(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    type = models.CharField(max_length=7, choices=TYPE_CHOICES)
+    type = models.CharField(max_length=7, choices=Type.choices)
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Relaciona el registro con el usuario
 
     def __str__(self):
         return f"{self.name} ({self.type})"
 
 class RegistroFinanciero(models.Model):
-    tipo = models.CharField(max_length=7, choices=TYPE_CHOICES)
+    tipo = models.CharField(max_length=7, choices=Type.choices)
     monto = models.DecimalField(max_digits=10, decimal_places=2)
     fecha = models.DateField()
     label = models.ForeignKey(Label, on_delete=models.CASCADE, blank=True, null=True)

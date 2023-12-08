@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-07 23:45+0100\n"
+"POT-Creation-Date: 2023-12-08 00:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,6 +61,10 @@ msgstr "Efectivo"
 msgid "Card"
 msgstr "Tarjeta"
 
+#: templates/moneitas/base_crear_registro.html:31
+msgid "Back"
+msgstr "Atrás"
+
 #: templates/moneitas/create_label.html:4 templates/moneitas/labels.html:29
 msgid "Create Label"
 msgstr "Crear Etiqueta"
@@ -80,6 +84,7 @@ msgid "Save"
 msgstr "Guardar"
 
 #: templates/moneitas/labels.html:5 templates/moneitas/labels.html:10
+#: templates/moneitas/navbar.html:23
 msgid "Labels"
 msgstr "Etiquetas"
 
@@ -87,6 +92,26 @@ msgstr "Etiquetas"
 msgid "Type"
 msgstr "Tipo"
 
-#: templates/moneitas/labels.html:63
+#: templates/moneitas/labels.html:47
+#, python-format
+msgid ""
+" \n"
+"                            %(type_t)s\n"
+"                            "
+msgstr ""
+
+#: templates/moneitas/labels.html:67
 msgid "Delete Selected"
 msgstr "Eliminar Seleccionados"
+
+#: templates/moneitas/navbar.html:14
+msgid "Home"
+msgstr "Inicio"
+
+#: templates/moneitas/navbar.html:19
+msgid "Settings"
+msgstr "Configuración"
+
+#: templates/moneitas/navbar.html:26
+msgid "Personal Information"
+msgstr ""

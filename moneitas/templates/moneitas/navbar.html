@@ -1,4 +1,6 @@
 {% load static %}
+{% load i18n %}
+
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light rounded" style="background-color:white !important;">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarData" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
@@ -8,16 +10,20 @@
     <div class="collapse navbar-collapse" id="navbarData">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link {% if dashboard_disabled %}disabled{% endif %}" id="inicio" href="{% url 'overview_dashboard' %}">Inicio</a>
+          <a class="nav-link {% if dashboard_disabled %}disabled{% endif %}" id="inicio" href="{% url 'overview_dashboard' %}">
+            {% translate "Home" %}
+          </a>
         </li>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="dropdown09" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Configuración
+              {% translate "Settings" %}
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdown09">
-                <li><a class="dropdown-item {% if labels_disabled %}disabled{% endif %}" id="labels" href="{% url 'list_labels'%}">Etiquetas</a></li>
+                <li><a class="dropdown-item {% if labels_disabled %}disabled{% endif %}" id="labels" href="{% url 'list_labels'%}">
+                  {% translate "Labels" %}
+                </a></li>
                 <li><a class="dropdown-item {% if todo_disabled %}disabled{% endif %}" href="{% url 'todo'%}">TODO's</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                <li><a class="dropdown-item" href="#">{% translate "Personal Information" %}</a></li>
             </ul>
         </li>
         <li class="nav-item active">
