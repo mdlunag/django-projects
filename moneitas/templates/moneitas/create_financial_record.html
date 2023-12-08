@@ -1,66 +1,67 @@
-{% extends "moneitas/base_crear_registro.html" %}
+{% extends "moneitas/base_create_record.html" %}
+{% load i18n %}
 
-{% block title %}Crear Registro de Ingresos y Gastos{% endblock %}
+{% block title %}{% translate "Create Financial Record" %}{% endblock %}
 
 {% block back_url %}{% url 'overview_dashboard' %}{% endblock %}
 
 {% block content %}
 
 
-<h1 class="mb-4">Registro de Ingresos y Gastos</h1>
+<h1 class="mb-4">{% translate "Financial Record" %}</h1>
 <form method="post" id="registro-financiero-form">
     {% csrf_token %}
-    <!-- Utiliza el componente btn-group para el botón tipo toggle -->
+    <!-- Utiliza el componente btn-group para el botón type toggle -->
     <div class="mb-3">
         <div class="btn-group" data-toggle="buttons">
             <label class="btn btn-primary btn-income">
-                <input type="radio" id="tipo-income" name="tipo" value="income" required {% if form.tipo.value == 'income' %}checked{% endif %}> Ingreso
+                <input type="radio" id="type-income" name="type" value="income" required {% if form.type.value == 'income' %}checked{% endif %}> Ingreso
             </label>
             <label class="btn btn-primary btn-expense">
-                <input type="radio" id="tipo-expense" name="tipo" value="expense" {% if form.tipo.value == 'expense' %}checked{% endif %}> Gasto
+                <input type="radio" id="type-expense" name="type" value="expense" {% if form.type.value == 'expense' %}checked{% endif %}> Gasto
             </label>
         </div>
     </div>
 
     <!-- Resto de los campos -->
     <p>
-        <label for="{{ form.metodo.id_for_label }}">Método:</label>
-        {{ form.metodo }}
+        <label for="{{ form.method.id_for_label }}">{% translate "Method:" %}</label>
+        {{ form.method }}
     </p>
 
     <p>
-        <label for="{{ form.monto.id_for_label }}">Monto:</label>
-        {{ form.monto }}
+        <label for="{{ form.amount.id_for_label }}">{% translate "Amount:" %}</label>
+        {{ form.amount }}
     </p>
     <p>
-        <label for="{{ form.fecha.id_for_label }}">Fecha:</label>
-        {{ form.fecha }}
+        <label for="{{ form.date.id_for_label }}">{% translate "Date:" %}</label>
+        {{ form.date }}
     </p>
     <p>
-        <label for="{{ form.label_existente.id_for_label }}">Selecciona una etiqueta:</label>
+        <label for="{{ form.label_existente.id_for_label }}">{% translate "Select a label:" %}</label>
         {{ form.label_existente }}
     </p>
     <p>
-        <label for="{{ form.label_personalizada.id_for_label }}">o crea una nueva etiqueta (opcional):</label>
+        <label for="{{ form.label_personalizada.id_for_label }}">{% translate "or create a new label (optional):" %}</label>
         {{ form.label_personalizada }}
     </p>
 
     <!-- Campo "Notas" al final -->
     <div class="mb-3">
-        <label for="id_nota" class="form-label">Notas:</label>
-        <input type="text" class="rounded-pill" id="id_nota" name="nota"value="{{ form.nota.value }}">
+        <label for="id_comment" class="form-label">{% translate "Comment" %}</label>
+        <input type="text" class="rounded-pill" id="id_comment" name="comment"value="{{ form.comment.value }}">
     </div>
-    <button type="submit" class="btn btn-primary">Guardar</button>
+    <button type="submit" class="btn btn-primary">{% translate "Save" %}</button>
 </form>
 
 
 <script>
 $(document).ready(function() {
-    // Función para cargar las labels disponibles según el tipo seleccionado
-    function cargarEtiquetasDisponibles(tipoSeleccionado, labelPlaceholder) {
+    // Función para cargar las labels disponibles según el type seleccionado
+    function cargarEtiquetasDisponibles(typeSeleccionado, labelPlaceholder) {
         $.ajax({
             url: '/moneitas/get_labels/',  // Cambia la URL a la que corresponda en tu proyecto
-            data: {'type': tipoSeleccionado},
+            data: {'type': typeSeleccionado},
             dataType: 'json',
             success: function(data) {
                 // Actualiza las opciones del campo de labels

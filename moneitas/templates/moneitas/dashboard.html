@@ -1,20 +1,25 @@
 {% extends "moneitas/base_template.html" %}
 {% load humanize %}
+{% load i18n %}
+
 
 {% block title %}
-    Dashboard de Finanzas
+{% translate "Financial Dashboard" %}
 {% endblock %}
 
 {% block content %}
 <div style="text-align: center;">
-    <h1>Dashboard de Finanzas</h1>
+    <h1>{% translate "Financial Dashboard" %}</h1>
     </br>
-     <a href="{% url 'crear_registro' %}" class="btn-crear mb-3">Crear Registro Financiero</a>
+     <a href="{% url 'create_record' %}" class="btn-crear mb-3">
+        {% translate "Create Financial Record" %}</a>
     </br>
 
     <form method="get" id="filtro-form" class="d-flex justify-content-center mt-3">
         <div class="form-group text-center mx-3">
-            <label for="month">Mes:</label>
+            <label for="month">
+                {% translate "Month:" %}
+            </label>
             <select id="month" name="month">
                 {% for month in month_choices %}
                     <option value="{{ month.0 }}" {% if month.0 == selected_month %}selected{% endif %}>
@@ -26,19 +31,25 @@
 
 
         <div class="form-group text-center mx-3">
-            <label for="{{ filtro_form.tipo.id_for_label }}">Tipo:</label>
-            {{ filtro_form.tipo }}
+            <label for="{{ filter_form.type.id_for_label }}">
+                {% translate "Type:" %}
+            </label>
+            {{ filter_form.type }}
         </div>
 
         <div class="form-group text-center mx-3">
-            <label for="{{ filtro_form.metodo.id_for_label }}">Metodo:</label>
-            {{ filtro_form.metodo }}
+            <label for="{{ filter_form.method.id_for_label }}">
+                {% translate "Method:" %}
+            </label>
+            {{ filter_form.method }}
         </div>
 
         <div class="d-flex">
             <div class="form-group mx-3">
-                <label for="{{ filtro_form.labels.id_for_label }}">Etiquetas:</label>
-                {{ filtro_form.labels }}
+                <label for="{{ filter_form.labels.id_for_label }}">
+                    {% translate "Labels:" %}
+                </label>
+                {{ filter_form.labels }}
             </div>
         </div>
     </form>
@@ -47,8 +58,8 @@
     <script>
         const filtroForm = document.getElementById('filtro-form');
         const filtroCheckboxes = document.querySelectorAll('input[name="labels"]');
-        const filtroTipos = document.querySelector('select[name="tipo"]');
-        const filtroMetodo = document.querySelector('select[name="metodo"]');
+        const filtroTipos = document.querySelector('select[name="type"]');
+        const filtroMetodo = document.querySelector('select[name="method"]');
 
         // Obtén una referencia al formulario y al select
         const monthSelect = document.getElementById('month');
@@ -87,22 +98,22 @@
             });
     </script>
 
-    {{ filtro_form.media.js }}
+    {{ filter_form.media.js }}
 
     </div>
 
 
     <div class="dashboard-row">
         <div class="dashboard-item">
-            <h4>Ingresos</h4>
+            <h4>{% translate "Incomes" %}</h4>
             <p>{{ incomes }}</p>
         </div>
         <div class="dashboard-item">
-            <h4>Gastos</h4>
+            <h4>{% translate "Expenses" %}</h4>
             <p>{{ expenses }}</p>
         </div>
         <div class="dashboard-item">
-            <h4>Saldo</h4>
+            <h4>{% translate "Result" %}</h4>
             <p>{{ balance }}</p>
         </div>
     </div>
@@ -113,25 +124,25 @@
         <table class="registros-table">
             <thead>
                 <tr>
-                    <th>Monto</th>
-                    <th>Fecha</th>
-                    <th>Etiqueta</th>
-                    <th>Nota</th>
+                    <th>{% translate "Amount" %}</th>
+                    <th>{% translate "Date" %}</th>
+                    <th>{% translate "Label" %}</th>
+                    <th>{% translate "Comment" %}</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                {% for registro in registros_financieros %}
-                    <tr class="{% if registro.tipo == 'income' %}income{% else %}expense{% endif %}">
+                {% for registro in financial_records %}
+                    <tr class="{% if registro.type == 'income' %}income{% else %}expense{% endif %}">
                         <td>
-                            {% if registro.tipo == 'expense' %}-{% endif %}
-                            {{ registro.monto }}
+                            {% if registro.type == 'expense' %}-{% endif %}
+                            {{ registro.amount }}
                         </td>
-                        <td>{{ registro.fecha|date:"D, M j, Y" }}</td>
+                        <td>{{ registro.date|date:"D, M j, Y" }}</td>
                         <td>{{ registro.label.name }}</td>
-                        <td>{{ registro.nota }}</td>
+                        <td>{{ registro.comment }}</td>
                         <td>
-                            {% if registro.metodo == 'credit_card' %}
+                            {% if registro.method == 'credit_card' %}
                             <i class="fa-regular fa-credit-card"></i>
                             {% else %}
                             <i class="fa-solid fa-money-bill-1"></i>
@@ -139,8 +150,8 @@
                         </td>
                         <td style="width: 1%;">
                             <div class="d-flex align-items-center">
-                                <input type="checkbox" name="eliminar_{{ registro.id }}">
-                                <a class="fas fa-pencil ms-3" href="{% url 'crear_registro' editar=registro.id %}"></a>
+                                <input type="checkbox" name="delete_{{ registro.id }}">
+                                <a class="fas fa-pencil ms-3" href="{% url 'create_record' edit=registro.id %}"></a>
                             </div>
                         </td>
 
@@ -153,7 +164,7 @@
             <button type="submit" class="btn btn-delete">
               <span class="mdi mdi-delete mdi-24px"></span>
               <span class="mdi mdi-delete-empty mdi-24px"></span>
-              <span>Eliminar seleccionados</span>
+              <span>{% translate "Delete Selected" %}</span>
             </button>
         </div>
     </form>

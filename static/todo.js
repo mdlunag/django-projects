@@ -61,7 +61,7 @@ var createNewTaskElement=function(taskString, taskId){
 var addTask = function() {
     console.log("Add Task...");
     var taskData = {
-        nombre: taskInput.value,
+        name: taskInput.value,
         state: 'incomplete'
     };
     fetch('/moneitas/api/create_task/', {
@@ -80,7 +80,7 @@ var addTask = function() {
     })
     .then(data => {
         console.log('Tarea creada:', data);
-        var listItem = createNewTaskElement(data.nombre, data.id);
+        var listItem = createNewTaskElement(data.name, data.id);
         incompleteTaskHolder.appendChild(listItem);
         bindTaskEvents(listItem, taskCompleted);
     })
@@ -100,7 +100,7 @@ var editTaskname=function(){
     var containsClass=listItem.classList.contains("editMode");
     var taskId = listItem.getAttribute('data-id');
     var taskData = {
-        nombre: editInput.value,
+        name: editInput.value,
     };
     if(containsClass){
         editTask(taskData, taskId);

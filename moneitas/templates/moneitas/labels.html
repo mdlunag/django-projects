@@ -11,8 +11,8 @@
 
     <form method="get" id="filtro-form" class="d-flex justify-content-center mt-3">
         <div class="form-group text-center mx-3">
-                <label for="{{ filtro_form.type.id_for_label }}">{% translate "Type" %}:</label>
-                {{ filtro_form.type }}
+                <label for="{{ filter_form.type.id_for_label }}">{% translate "Type" %}:</label>
+                {{ filter_form.type }}
         </div>
     </form>
     <script>
@@ -48,7 +48,7 @@
                         </td>
                         <td style="width: 1%;">
                             <div class="d-flex align-items-center">
-                                <input type="checkbox" name="eliminar_{{ label.id }}">
+                                <input type="checkbox" name="delete_{{ label.id }}">
                                 <a class="fas fa-pencil ms-3" href="{% url 'create_label' edit=label.id %}"></a>
                             </div>
                         </td>

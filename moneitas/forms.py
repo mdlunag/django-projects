@@ -1,15 +1,15 @@
 from django import forms
-from .models import RegistroFinanciero, Label
+from .models import FinancialRecord, Label
 from datetime import date
 from django_select2.forms import Select2MultipleWidget
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import gettext_lazy as _
 
 
-class RegistroFinancieroForm(forms.ModelForm):
+class FinancialRecordForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)  # Obtiene el usuario de los argumentos
-        super(RegistroFinancieroForm, self).__init__(*args, **kwargs)
+        super(FinancialRecordForm, self).__init__(*args, **kwargs)
         print(user)
         if user:
             self.fields['label_existente'].queryset = Label.objects.filter(user=user)
@@ -26,14 +26,14 @@ class RegistroFinancieroForm(forms.ModelForm):
     )
 
 
-    fecha = forms.DateField()
+    date = forms.DateField()
 
 
     class Meta:
-        model = RegistroFinanciero
-        fields = ['tipo', 'monto', 'fecha', 'label_existente', 'label_personalizada', 'nota', 'metodo']
+        model = FinancialRecord
+        fields = ['type', 'amount', 'date', 'label_existente', 'label_personalizada', 'comment', 'method']
         widgets = {
-            'monto': forms.TextInput(attrs={'class': 'rounded-pill'}),
+            'amount': forms.TextInput(attrs={'class': 'rounded-pill'}),
         }
 
 
@@ -51,13 +51,13 @@ class FiltroDashboardForm(forms.Form):
     )
 
 
-    tipo = forms.ChoiceField(
+    type = forms.ChoiceField(
         choices=(('income', 'Ingreso'), ('expense', 'Gasto'),('', 'Todos')),
         required=False,
         label="Tipo de registro",
     )
 
-    metodo = forms.ChoiceField(
+    method = forms.ChoiceField(
         choices=(('cash', 'Efectivo'), ('credit_card', 'Tarjeta'),('', 'Todos')),
         required=False,
         label="Tipo de registro",

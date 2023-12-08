@@ -1,5 +1,5 @@
-from .models import RegistroFinanciero, Task, Label
-from .forms import RegistroFinancieroForm, FiltroDashboardForm, FiltroLabelsListForm, UserCreationForm
+from .models import FinancialRecord, Task, Label
+from .forms import FinancialRecordForm, FiltroDashboardForm, FiltroLabelsListForm, UserCreationForm
 
 from calendar import month_name
 from datetime import date, timedelta
@@ -25,12 +25,12 @@ def todo(request):
     tasks_todo = Task.objects.filter(state='incomplete')
     tasks_done = Task.objects.filter(state='complete')
     if request.method == 'POST':
-        nombre = request.POST.get('nombre')
-        task = Task(nombre=nombre, state="INCOMPLETE")
+        name = request.POST.get('name')
+        task = Task(name=name, state="INCOMPLETE")
         task.save()
         # Procesar el formulario de eliminación
         for task in Task.objects.all():
-            if request.POST.get(f"eliminar_{task.id}") == 'on':
+            if request.POST.get(f"delete_{task.id}") == 'on':
                 task.delete()
         return redirect('todo')
 
@@ -96,15 +96,15 @@ def list_labels(request):
     if request.method == 'POST':
         # Procesar el formulario de eliminación
         for label in labels:
-            if request.POST.get(f"eliminar_{label.id}") == 'on':
+            if request.POST.get(f"delete_{label.id}") == 'on':
                 label.delete()
         return redirect('list_labels')
 
     # Procesar el formulario de filtro
-    filtro_form = FiltroLabelsListForm(request.GET, user=request.user)
+    filter_form = FiltroLabelsListForm(request.GET, user=request.user)
 
-    if filtro_form.is_valid():
-        selected_type = filtro_form.cleaned_data.get('type')
+    if filter_form.is_valid():
+        selected_type = filter_form.cleaned_data.get('type')
 
         if selected_type and selected_type != '':
             labels = labels.filter(type=selected_type)
@@ -112,7 +112,7 @@ def list_labels(request):
     return render(request, 'moneitas/labels.html', {
         'labels': labels,
         'labels_disabled': True,
-        'filtro_form': filtro_form,
+        'filter_form': filter_form,
         },)
 
 @login_required
@@ -124,7 +124,7 @@ def create_label(request, edit=None):
 
         label = Label(name=name, type=type) if not edit else Label.objects.get(id=edit)
 
-        # Asigna el valor del campo tipo según la selección del botón de alternancia.
+        # Asigna el valor del campo type según la selección del botón de alternancia.
         label.type = type
         label.name = name
         label.user = request.user
@@ -183,11 +183,11 @@ def user_logout(request):
 
 #Registro Financiero
 @login_required
-def crear_registro_financiero(request, editar=None):
+def create_financial_record(request, edit=None):
     if request.method == 'POST':
-        form = RegistroFinancieroForm(request.POST, user=request.user)
+        form = FinancialRecordForm(request.POST, user=request.user)
         if form.is_valid():
-            registro = form.save(commit=False) if not editar else RegistroFinanciero.objects.get(id=editar)
+            record = form.save(commit=False) if not edit else FinancialRecord.objects.get(id=edit)
             etiqueta_existente = form.cleaned_data['label_existente']
             etiqueta_personalizada = form.cleaned_data['label_personalizada']
 
@@ -196,69 +196,69 @@ def crear_registro_financiero(request, editar=None):
                 etiqueta = etiqueta_existente
             elif etiqueta_personalizada:
                 # Crea una nueva etiqueta personalizada.
-                etiqueta = Label.objects.create(name=etiqueta_personalizada, user=request.user, type=registro.tipo or request.POST.get('tipo'))
+                etiqueta = Label.objects.create(name=etiqueta_personalizada, user=request.user, type=record.type or request.POST.get('type'))
             else:
                 # Maneja el caso en el que no se proporciona ninguna etiqueta.
                 etiqueta = None
-            # Asigna el valor del campo tipo según la selección del botón de alternancia.
-            tipo = request.POST.get('tipo')
-            nota = request.POST.get('nota')
-            metodo = request.POST.get('metodo')
+            # Asigna el valor del campo type según la selección del botón de alternancia.
+            type = request.POST.get('type')
+            comment = request.POST.get('comment')
+            method = request.POST.get('method')
 	        # Crea el registro financiero con la etiqueta asociada.
-            registro.label = etiqueta  # Asocia la etiqueta con el registro financiero
-            registro.tipo = tipo
-            registro.nota = nota or ''
-            registro.metodo = metodo
+            record.label = etiqueta  # Asocia la etiqueta con el record financiero
+            record.type = type
+            record.comment = comment or ''
+            record.method = method
             #registro.user= User.objects.get(username='aitor.rife@gmail.com')
-            registro.user = request.user
-            if editar:
-                registro.monto = form.cleaned_data['monto']
-                registro.fecha = form.cleaned_data['fecha']
-                registro.nota = form.cleaned_data['nota']
+            record.user = request.user
+            if edit:
+                record.amount = form.cleaned_data['amount']
+                record.date = form.cleaned_data['date']
+                record.comment = form.cleaned_data['comment']
 
-            registro.save()
+            record.save()
 
              # Después de crear el registro, obtén el mes del registro creado
-            mes_registro = registro.fecha.month  # Asegúrate de reemplazar "nuevo_registro" con la variable real que contiene el registro recién creado
+            month_record = record.date.month  # Asegúrate de reemplazar "nuevo_registro" con la variable real que contiene el registro recién creado
 
 
             # Construye la URL de redirección con el parámetro "month" del mes del registro
-            url_redireccion = reverse('overview_dashboard') + f'?month={mes_registro}'
+            url_redireccion = reverse('overview_dashboard') + f'?month={month_record}'
 
             # Redirige al usuario a la página del panel de control con el filtro aplicado
             return redirect(url_redireccion)
-    if editar:
-        registro_editar = RegistroFinanciero.objects.get(id=editar)
-        print(registro_editar.tipo)
-        form = RegistroFinancieroForm(initial={
-            'tipo': 'income' if registro_editar.tipo == 'income' else 'expense',
-            'metodo': registro_editar.metodo,
-            'monto': registro_editar.monto,
-            'fecha': registro_editar.fecha,
-            'label_existente': registro_editar.label or '',
-            'nota':  registro_editar.nota,
+    if edit:
+        record_edit = FinancialRecord.objects.get(id=edit)
+        print(record_edit.type)
+        form = FinancialRecordForm(initial={
+            'type': 'income' if record_edit.type == 'income' else 'expense',
+            'method': record_edit.method,
+            'amount': record_edit.amount,
+            'date': record_edit.date,
+            'label_existente': record_edit.label or '',
+            'comment':  record_edit.comment,
 
             })
     else:
-        form = RegistroFinancieroForm(initial={'fecha': date.today(), 'nota':''}, user=request.user)  # Prellenar la fecha con la fecha actual
+        form = FinancialRecordForm(initial={'date': date.today(), 'comment':''}, user=request.user)  # Prellenar la fecha con la fecha actual
 
-    return render(request, 'moneitas/crear_registro_financiero.html', {'form': form})
+    return render(request, 'moneitas/create_financial_record.html', {'form': form})
 
 from django.db.models import Q
 
 
-def filtrar_registros(registros_financieros, etiqueta, tipo):
+def filtrar_registros(financial_records, etiqueta, type):
     # Construye una consulta de filtro dinámica
     filtro = Q()  # Query vacía inicialmente
 
     if etiqueta:
         filtro &= Q(etiqueta=etiqueta)
 
-    if tipo:
-        filtro &= Q(tipo=tipo)
+    if type:
+        filtro &= Q(type=type)
 
     # Aplica el filtro a los registros financieros
-    return registros_financieros.filter(filtro)
+    return financial_records.filter(filtro)
 
 @login_required
 def overview_dashboard(request):
@@ -282,52 +282,52 @@ def overview_dashboard(request):
         last_day_of_month = None
 
     # Obtener una lista de meses con datos
-    months_with_data = RegistroFinanciero.objects.filter(
-        fecha__year=current_date.year
-    ).dates('fecha', 'month')
+    months_with_data = FinancialRecord.objects.filter(
+        date__year=current_date.year
+    ).dates('date', 'month')
 
-    # Convertir los objetos de fecha a nombres de mes legibles
+    # Convertir los objetos de fecha a names de mes legibles
     month_choices = [(month.month, month_name[month.month]) for month in months_with_data]
     month_choices += [('Todos', 'Todos')]
 
     # Filtrar registros financieros según el rango de fechas (si no es "Todos")
     if first_day_of_month and last_day_of_month:
-        registros_financieros = RegistroFinanciero.objects.filter(
-            fecha__range=[first_day_of_month, last_day_of_month]
+        financial_records = FinancialRecord.objects.filter(
+            date__range=[first_day_of_month, last_day_of_month]
         )
     else:
-        registros_financieros = RegistroFinanciero.objects.all()
+        financial_records = FinancialRecord.objects.all()
 
     # Procesar el formulario de filtro
-    filtro_form = FiltroDashboardForm(request.GET, user=request.user)
+    filter_form = FiltroDashboardForm(request.GET, user=request.user)
 
-    if filtro_form.is_valid():
-        selected_labels = filtro_form.cleaned_data.get('labels')
-        tipo_seleccionado = filtro_form.cleaned_data.get('tipo')
-        metodo_seleccionado = filtro_form.cleaned_data.get('metodo')
+    if filter_form.is_valid():
+        selected_labels = filter_form.cleaned_data.get('labels')
+        type_seleccionado = filter_form.cleaned_data.get('type')
+        method_seleccionado = filter_form.cleaned_data.get('method')
 
-        if metodo_seleccionado and metodo_seleccionado != '':
-            registros_financieros = registros_financieros.filter(metodo=metodo_seleccionado)
+        if method_seleccionado and method_seleccionado != '':
+            financial_records = financial_records.filter(method=method_seleccionado)
 
         if selected_labels:
-            registros_financieros = registros_financieros.filter(label__in=selected_labels)
+            financial_records = financial_records.filter(label__in=selected_labels)
 
-        if tipo_seleccionado and tipo_seleccionado != '':
-            registros_financieros = registros_financieros.filter(tipo=tipo_seleccionado)
+        if type_seleccionado and type_seleccionado != '':
+            financial_records = financial_records.filter(type=type_seleccionado)
 
     if request.user.username != 'admin':
-        registros_financieros = registros_financieros.filter(user=request.user)
+        financial_records = financial_records.filter(user=request.user)
 
-    incomes = registros_financieros.filter(tipo='income').aggregate(Sum('monto'))['monto__sum'] or 0
-    expenses = registros_financieros.filter(tipo='expense').aggregate(Sum('monto'))['monto__sum'] or 0
+    incomes = financial_records.filter(type='income').aggregate(Sum('amount'))['amount__sum'] or 0
+    expenses = financial_records.filter(type='expense').aggregate(Sum('amount'))['amount__sum'] or 0
 
     # Calcular el saldo total
     balance = incomes - expenses
 
     if request.method == 'POST':
         # Procesar el formulario de eliminación
-        for registro in registros_financieros:
-            if request.POST.get(f"eliminar_{registro.id}") == 'on':
+        for registro in financial_records:
+            if request.POST.get(f"delete_{registro.id}") == 'on':
                 registro.delete()
         return redirect('overview_dashboard')
 
@@ -338,8 +338,8 @@ def overview_dashboard(request):
         'balance': balance,
         'selected_month': selected_month,
         'month_choices': month_choices,
-        'registros_financieros': registros_financieros.order_by('-fecha'),
-        'filtro_form': filtro_form,
+        'financial_records': financial_records.order_by('-date'),
+        'filter_form': filter_form,
         'dashboard_disabled': True,
     })
 

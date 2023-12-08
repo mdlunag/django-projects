@@ -26,24 +26,24 @@ class Label(models.Model):
     def __str__(self):
         return f"{self.name} ({self.type})"
 
-class RegistroFinanciero(models.Model):
-    tipo = models.CharField(max_length=7, choices=Type.choices)
-    monto = models.DecimalField(max_digits=10, decimal_places=2)
-    fecha = models.DateField()
+class FinancialRecord(models.Model):
+    type = models.CharField(max_length=7, choices=Type.choices)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    date = models.DateField()
     label = models.ForeignKey(Label, on_delete=models.CASCADE, blank=True, null=True)
-    nota = models.TextField(blank=True, null=True)
-    eliminar = models.BooleanField(default=False)  # Campo para identificar registros a eliminar
+    comment = models.TextField(blank=True, null=True)
+    delete = models.BooleanField(default=False)  # Campo para identificar registros a eliminar
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Relaciona el registro con el usuario
-    metodo = models.CharField(max_length=12, choices=METHOD_CHOICES, default='cash')
+    method = models.CharField(max_length=12, choices=METHOD_CHOICES, default='cash')
 
 
     def __str__(self):
-        return f"{self.user.username}: {self.get_tipo_display()}: {self.monto} - {self.fecha}"
+        return f"{self.user.username}: {self.get_type_display()}: {self.amount} - {self.date}"
 
 
 class Task(models.Model):
-    nombre = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, unique=True)
     state = models.CharField(max_length=10, choices=STATE_CHOICES)
 
     def __str__(self):
-        return f"{self.nombre}"
+        return f"{self.name}"

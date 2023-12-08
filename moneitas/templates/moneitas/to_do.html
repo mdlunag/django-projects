@@ -27,7 +27,7 @@
     {% for task_todo in tasks_todo%}
     <li data-id="{{ task_todo.id }}">
         <input type="checkbox">
-        <label>{{task_todo.nombre}}</label>
+        <label>{{task_todo.name}}</label>
         <input type="text" class="todo" style="display:none;">
         <button class="edit todo">Edit</button>
         <button class="delete todo">Delete</button></li>
@@ -41,7 +41,7 @@
     {% for task_done in tasks_done%}
     <li data-id="{{ task_done.id }}">
         <input type="checkbox">
-        <label>{{task_done.nombre}}</label>
+        <label>{{task_done.name}}</label>
         <input type="text" class="todo" style="display:none;">
         <button class="edit todo">Edit</button>
         <button class="delete todo">Delete</button>
