@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+from django.utils.translation import gettext_lazy as _
 import environ
 env = environ.Env()
 environ.Env.read_env()
@@ -144,7 +145,12 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'es-es'
+LANGUAGE_CODE = 'es'
+
+LANGUAGES = [
+    ("es", " Español"),
+    ("en", " English"),
+]
 
 TIME_ZONE = 'UTC'
 

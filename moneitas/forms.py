@@ -1,10 +1,12 @@
 from django import forms
-from .models import FinancialRecord, Label
+from .models import FinancialRecord, Label, METHOD_CHOICES
 from datetime import date
 from django_select2.forms import Select2MultipleWidget
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import gettext_lazy as _
 
+TYPE_CHOICES = (('income', _('Income')), ('expense', _('Expense')),('', _('All')))
+METHOD_CHOICES += ('', _('All')),
 
 class FinancialRecordForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -52,13 +54,13 @@ class FiltroDashboardForm(forms.Form):
 
 
     type = forms.ChoiceField(
-        choices=(('income', 'Ingreso'), ('expense', 'Gasto'),('', 'Todos')),
+        choices=TYPE_CHOICES,
         required=False,
         label="Tipo de registro",
     )
 
     method = forms.ChoiceField(
-        choices=(('cash', 'Efectivo'), ('credit_card', 'Tarjeta'),('', 'Todos')),
+        choices=METHOD_CHOICES,
         required=False,
         label="Tipo de registro",
         )
@@ -70,7 +72,7 @@ class FiltroLabelsListForm(forms.Form):
         super(FiltroLabelsListForm, self).__init__(*args, **kwargs)
 
     type = forms.ChoiceField(
-        choices=(('income', _('Income')), ('expense', _('Expense')),('', _('All'))),
+        choices=TYPE_CHOICES,
         required=False,
         label=_("Record Type"),
     )

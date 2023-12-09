@@ -1,7 +1,15 @@
 from .models import FinancialRecord, Task, Label
 from .forms import FinancialRecordForm, FiltroDashboardForm, FiltroLabelsListForm, UserCreationForm
 
-from calendar import month_name
+from calendar import month_name, different_locale
+import locale
+
+def get_month_name(month_no, lang):
+    a = locale.normalize(lang)
+    loc= locale._replace_encoding(a, 'UTF-8')
+    with different_locale(loc):
+        return month_name[month_no]
+
 from datetime import date, timedelta
 
 from django.db.models import Sum
@@ -287,7 +295,8 @@ def overview_dashboard(request):
     ).dates('date', 'month')
 
     # Convertir los objetos de fecha a names de mes legibles
-    month_choices = [(month.month, month_name[month.month]) for month in months_with_data]
+    lang = request.LANGUAGE_CODE
+    month_choices = [(month.month, get_month_name(month.month, lang).capitalize()) for month in months_with_data]
     month_choices += [('Todos', 'Todos')]
 
     # Filtrar registros financieros según el rango de fechas (si no es "Todos")

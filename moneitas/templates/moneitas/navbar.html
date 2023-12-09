@@ -15,20 +15,47 @@
           </a>
         </li>
         <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown09" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {% translate "Settings" %}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="dropdown09">
+              <li><a class="dropdown-item {% if labels_disabled %}disabled{% endif %}" id="labels" href="{% url 'list_labels'%}">
+                {% translate "Labels" %}
+              </a></li>
+              <li><a class="dropdown-item {% if todo_disabled %}disabled{% endif %}" href="{% url 'todo'%}">TODO's</a></li>
+              <li><a class="dropdown-item" href="#">{% translate "Personal Information" %}</a></li>
+          </ul>
+        </li>
+        <form action="{% url 'set_language' %}" method="post">
+          <li class="nav-item dropdown ml-auto">
             <a class="nav-link dropdown-toggle" href="#" id="dropdown09" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              {% translate "Settings" %}
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="dropdown09">
-                <li><a class="dropdown-item {% if labels_disabled %}disabled{% endif %}" id="labels" href="{% url 'list_labels'%}">
-                  {% translate "Labels" %}
-                </a></li>
-                <li><a class="dropdown-item {% if todo_disabled %}disabled{% endif %}" href="{% url 'todo'%}">TODO's</a></li>
-                <li><a class="dropdown-item" href="#">{% translate "Personal Information" %}</a></li>
-            </ul>
-        </li>
-        <li class="nav-item active">
-          <a class="nav-link" href="{% url 'logout' %}">Logout <span class="sr-only">(current)</span></a>
-        </li>
+              &#127760; {% translate "Language" %}</a>
+              <input name="next" type="hidden" value="{{ redirect_to }}">
+            
+              {% csrf_token %}
+              <input name="next" type="hidden" value="{{ request.get_full_path|slice:'3:' }}" />
+              <ul class="dropdown-menu dropdown-menu-right language menu" aria-labelledby="dropdown09">
+                {% get_current_language as LANGUAGE_CODE %}
+                {% get_available_languages as LANGUAGES %}
+                {% get_language_info_list for LANGUAGES as languages %}
+                {% for language in languages %}
+                    <li>
+                      <a href="/{{ language.code }}{{ request.get_full_path|slice:'3:' }}"
+                        class="dropdown-item {% if language.code == LANGUAGE_CODE %}disabled{% endif %}"
+                        lang="{{ language.code }}">
+                        {{ language.name_translated }}
+                      </a>
+                    </li>
+                {% endfor %}
+              </ul>
+          </li>
+      </form>
+      <li class="nav-item active justify-content-end">
+        <a class="nav-link" href="{% url 'logout' %}">
+          <i class="fa fa-sign-out" aria-hidden="true"></i>
+          Logout 
+          <span class="sr-only">(current)</span></a>
+      </li>
       </ul>
     </div>
 

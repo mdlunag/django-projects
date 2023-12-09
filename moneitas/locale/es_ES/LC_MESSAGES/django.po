@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-08 02:38+0100\n"
+"POT-Creation-Date: 2023-12-09 01:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,31 +17,31 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: forms.py:73 models.py:18 templates/moneitas/create_label.html:19
+#: forms.py:8 models.py:18 templates/moneitas/create_label.html:19
 msgid "Income"
 msgstr "Ingreso"
 
-#: forms.py:73 models.py:19 templates/moneitas/create_label.html:23
+#: forms.py:8 models.py:19 templates/moneitas/create_label.html:23
 msgid "Expense"
 msgstr "Gasto"
 
-#: forms.py:73
+#: forms.py:8 forms.py:9
 msgid "All"
 msgstr "Todos"
 
-#: forms.py:75
+#: forms.py:77
 msgid "Record Type"
 msgstr "Tipo de registro"
 
-#: forms.py:81
+#: forms.py:83
 msgid "Username or Email Address"
 msgstr "Nombre de usuario o Email"
 
-#: forms.py:82
+#: forms.py:84
 msgid "Enter your Password"
 msgstr "Cree una contraseña"
 
-#: forms.py:83
+#: forms.py:85
 msgid "Confirm your Password"
 msgstr "Confirme su contraseña"
 
@@ -172,3 +172,7 @@ msgstr "Configuración"
 #: templates/moneitas/navbar.html:26
 msgid "Personal Information"
 msgstr "Información Personal"
+
+#: templates/moneitas/navbar.html:32
+msgid "Language"
+msgstr "Idioma"
