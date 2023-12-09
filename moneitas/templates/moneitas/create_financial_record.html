@@ -15,10 +15,12 @@
     <div class="mb-3">
         <div class="btn-group" data-toggle="buttons">
             <label class="btn btn-primary btn-income">
-                <input type="radio" id="type-income" name="type" value="income" required {% if form.type.value == 'income' %}checked{% endif %}> Ingreso
+                <input type="radio" id="type-income" name="type" value="income" required {% if form.type.value == 'income' %}checked{% endif %}>
+                {% translate "Income" %}
             </label>
             <label class="btn btn-primary btn-expense">
-                <input type="radio" id="type-expense" name="type" value="expense" {% if form.type.value == 'expense' %}checked{% endif %}> Gasto
+                <input type="radio" id="type-expense" name="type" value="expense" {% if form.type.value == 'expense' %}checked{% endif %}>
+                {% translate "Expense" %}
             </label>
         </div>
     </div>

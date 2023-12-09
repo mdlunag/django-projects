@@ -19,7 +19,7 @@ class FinancialRecordForm(forms.ModelForm):
     label_existente = forms.ModelChoiceField(
         queryset=Label.objects.all(),
         required=False,
-        empty_label="Elige una etiqueta existente (opcional)"
+        empty_label=_("Choose existing label (optional)")
     )
     label_personalizada = forms.CharField(
         max_length=255,
