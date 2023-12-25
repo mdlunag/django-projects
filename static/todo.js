@@ -3,7 +3,7 @@
 
 
 //Event handling, uder interaction is what starts the code execution.
-
+const data = document.currentScript.dataset;
 var taskInput=document.getElementById("new-task");//Add a new task.
 var addButton=document.getElementById("add");//first button
 console.log("add button")
@@ -60,11 +60,12 @@ var createNewTaskElement=function(taskString, taskId){
 
 var addTask = function() {
     console.log("Add Task...");
+    console.log(data.lang);
     var taskData = {
         name: taskInput.value,
         state: 'incomplete'
     };
-    fetch('/moneitas/api/create_task/', {
+    fetch('/' + data.lang + '/moneitas/api/create_task/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
