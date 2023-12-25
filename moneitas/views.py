@@ -25,10 +25,15 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets
 from .serializers import TaskSerializer
 
 
 #To Do list
+class TaskViewSet(viewsets.ModelViewSet):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+
 def todo(request):
     tasks_todo = Task.objects.filter(state='incomplete')
     tasks_done = Task.objects.filter(state='complete')
