@@ -32,7 +32,6 @@ class FinancialRecord(models.Model):
     date = models.DateField()
     label = models.ForeignKey(Label, on_delete=models.CASCADE, blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
-    delete = models.BooleanField(default=False)  # Campo para identificar registros a eliminar
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Relaciona el registro con el usuario
     method = models.CharField(max_length=12, choices=METHOD_CHOICES, default='cash')
 
