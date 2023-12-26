@@ -34,6 +34,7 @@ class FinancialRecord(models.Model):
     comment = models.TextField(blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Relaciona el registro con el usuario
     method = models.CharField(max_length=12, choices=METHOD_CHOICES, default='cash')
+    income_paid = models.BooleanField(default=False)
 
 
     def __str__(self):

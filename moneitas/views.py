@@ -26,7 +26,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets
-from .serializers import TaskSerializer
+from .serializers import TaskSerializer, FinancialRecordSerializer
 
 
 #To Do list
@@ -235,7 +235,7 @@ def create_financial_record(request, edit=None):
             month_record = record.date.month  # Asegúrate de reemplazar "nuevo_registro" con la variable real que contiene el registro recién creado
 
 
-            # Construye la URL de redirección con el parámetro "month" del mes del registro
+            # Construye la URL de redirección con eledit= parámetro "month" del mes del registro
             url_redireccion = reverse('overview_dashboard') + f'?month={month_record}'
 
             # Redirige al usuario a la página del panel de control con el filtro aplicado
@@ -257,21 +257,22 @@ def create_financial_record(request, edit=None):
 
     return render(request, 'moneitas/create_financial_record.html', {'form': form})
 
-from django.db.models import Q
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])  # Aplica la verificación de autenticación solo a esta función
+def edit_financial_record(request, record_id):
+    try:
+        record = FinancialRecord.objects.get(id=record_id)
+    except FinancialRecord.DoesNotExist:
+        return Response({'error': "Financial record doesn't exist"}, status=status.HTTP_404_NOT_FOUND)
 
-
-def filtrar_registros(financial_records, etiqueta, type):
-    # Construye una consulta de filtro dinámica
-    filtro = Q()  # Query vacía inicialmente
-
-    if etiqueta:
-        filtro &= Q(etiqueta=etiqueta)
-
-    if type:
-        filtro &= Q(type=type)
-
-    # Aplica el filtro a los registros financieros
-    return financial_records.filter(filtro)
+    if request.method == 'PATCH':
+        serializer = FinancialRecordSerializer(record, data=request.data,partial=True)
+        print(request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @login_required
 def overview_dashboard(request):
