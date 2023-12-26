@@ -198,37 +198,31 @@ def user_logout(request):
 @login_required
 def create_financial_record(request, edit=None):
     if request.method == 'POST':
-        form = FinancialRecordForm(request.POST, user=request.user)
+        record = FinancialRecord.objects.filter(id=edit) if edit else None
+        initial = record.values('type', 'amount', 'comment', 'date', 'method')[0] if record else []
+        form = FinancialRecordForm(request.POST, user=request.user, initial=initial)
         if form.is_valid():
-            record = form.save(commit=False) if not edit else FinancialRecord.objects.get(id=edit)
+            record = record[0] if record else form.save(commit=False)
             etiqueta_existente = form.cleaned_data['label_existente']
             etiqueta_personalizada = form.cleaned_data['label_personalizada']
 
             # Verifica si se seleccionó una etiqueta existente o se proporcionó una etiqueta personalizada.
-            if etiqueta_existente:
-                etiqueta = etiqueta_existente
-            elif etiqueta_personalizada:
-                # Crea una nueva etiqueta personalizada.
-                etiqueta = Label.objects.create(name=etiqueta_personalizada, user=request.user, type=record.type or request.POST.get('type'))
+            if etiqueta_existente or etiqueta_personalizada:
+                etiqueta = etiqueta_existente or Label.objects.create(
+                    name=etiqueta_personalizada, 
+                    user=request.user, 
+                    type=record.type or request.POST.get('type'))
             else:
                 # Maneja el caso en el que no se proporciona ninguna etiqueta.
                 etiqueta = None
-            # Asigna el valor del campo type según la selección del botón de alternancia.
-            type = request.POST.get('type')
-            comment = request.POST.get('comment')
-            method = request.POST.get('method')
+            
 	        # Crea el registro financiero con la etiqueta asociada.
             record.label = etiqueta  # Asocia la etiqueta con el record financiero
-            record.type = type
-            record.comment = comment or ''
-            record.method = method
             #registro.user= User.objects.get(username='aitor.rife@gmail.com')
             record.user = request.user
-            if edit:
-                record.amount = form.cleaned_data['amount']
-                record.date = form.cleaned_data['date']
-                record.comment = form.cleaned_data['comment']
-
+            if edit and form.changed_data:
+                for field in form.changed_data:
+                    setattr(record, field, form.cleaned_data[field])
             record.save()
 
              # Después de crear el registro, obtén el mes del registro creado

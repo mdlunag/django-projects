@@ -33,7 +33,7 @@ class FinancialRecordForm(forms.ModelForm):
 
     class Meta:
         model = FinancialRecord
-        fields = ['type', 'amount', 'date', 'label_existente', 'label_personalizada', 'comment', 'method']
+        fields = ['type', 'amount', 'date', 'label_existente', 'label_personalizada', 'comment', 'method', 'income_paid']
         widgets = {
             'amount': forms.TextInput(attrs={'class': 'rounded-pill'}),
         }
