@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-09 02:04+0100\n"
+"POT-Creation-Date: 2023-12-27 01:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,19 +35,19 @@ msgstr "Todos"
 msgid "Choose existing label (optional)"
 msgstr "Elige una etiqueta existente (opcional)"
 
-#: forms.py:77
+#: forms.py:78
 msgid "Record Type"
 msgstr "Tipo de registro"
 
-#: forms.py:83
+#: forms.py:84
 msgid "Username or Email Address"
 msgstr "Nombre de usuario o Email"
 
-#: forms.py:84
+#: forms.py:85
 msgid "Enter your Password"
 msgstr "Cree una contraseña"
 
-#: forms.py:85
+#: forms.py:86
 msgid "Confirm your Password"
 msgstr "Confirme su contraseña"
 
@@ -64,7 +64,7 @@ msgid "Back"
 msgstr "Atrás"
 
 #: templates/moneitas/create_financial_record.html:4
-#: templates/moneitas/dashboard.html:15
+#: templates/moneitas/dashboard.html:17
 msgid "Create Financial Record"
 msgstr "Crear Registro Financiero"
 
@@ -73,34 +73,38 @@ msgid "Financial Record"
 msgstr "Registro Financiero"
 
 #: templates/moneitas/create_financial_record.html:30
-#: templates/moneitas/dashboard.html:42
+#: templates/moneitas/dashboard.html:44
 msgid "Method:"
 msgstr "Método"
 
-#: templates/moneitas/create_financial_record.html:35
+#: templates/moneitas/create_financial_record.html:36
+msgid "Paid?"
+msgstr "Pagado?"
+
+#: templates/moneitas/create_financial_record.html:42
 msgid "Amount:"
 msgstr "Monto:"
 
-#: templates/moneitas/create_financial_record.html:39
+#: templates/moneitas/create_financial_record.html:46
 #, fuzzy
 #| msgid "Date"
 msgid "Date:"
 msgstr "Fecha"
 
-#: templates/moneitas/create_financial_record.html:43
+#: templates/moneitas/create_financial_record.html:50
 msgid "Select a label:"
 msgstr "Selecciona una etiqueta:"
 
-#: templates/moneitas/create_financial_record.html:47
+#: templates/moneitas/create_financial_record.html:54
 msgid "or create a new label (optional):"
 msgstr "o crea una nueva etiqueta (opcional):"
 
-#: templates/moneitas/create_financial_record.html:53
-#: templates/moneitas/dashboard.html:130
+#: templates/moneitas/create_financial_record.html:60
+#: templates/moneitas/dashboard.html:87
 msgid "Comment"
 msgstr "Nota"
 
-#: templates/moneitas/create_financial_record.html:56
+#: templates/moneitas/create_financial_record.html:63
 #: templates/moneitas/create_label.html:34
 msgid "Save"
 msgstr "Guardar"
@@ -109,8 +113,7 @@ msgstr "Guardar"
 msgid "Create Label"
 msgstr "Crear Etiqueta"
 
-#: templates/moneitas/create_label.html:11
-#: templates/moneitas/dashboard.html:129
+#: templates/moneitas/create_label.html:11 templates/moneitas/dashboard.html:86
 msgid "Label"
 msgstr "Etiquetas"
 
@@ -118,43 +121,43 @@ msgstr "Etiquetas"
 msgid "Name"
 msgstr "Nombre"
 
-#: templates/moneitas/dashboard.html:7 templates/moneitas/dashboard.html:12
+#: templates/moneitas/dashboard.html:8 templates/moneitas/dashboard.html:14
 msgid "Financial Dashboard"
 msgstr "Dashboard de Finanzas"
 
-#: templates/moneitas/dashboard.html:21
+#: templates/moneitas/dashboard.html:23
 msgid "Month:"
 msgstr "Mes"
 
-#: templates/moneitas/dashboard.html:35
+#: templates/moneitas/dashboard.html:37
 msgid "Type:"
 msgstr "Tipo"
 
-#: templates/moneitas/dashboard.html:50
+#: templates/moneitas/dashboard.html:52
 msgid "Labels:"
 msgstr "Etiquetas"
 
-#: templates/moneitas/dashboard.html:108
+#: templates/moneitas/dashboard.html:66
 msgid "Incomes"
 msgstr "Ingresos"
 
-#: templates/moneitas/dashboard.html:112
+#: templates/moneitas/dashboard.html:70
 msgid "Expenses"
 msgstr "Gastos"
 
-#: templates/moneitas/dashboard.html:116
+#: templates/moneitas/dashboard.html:74
 msgid "Result"
 msgstr "Saldo"
 
-#: templates/moneitas/dashboard.html:127
+#: templates/moneitas/dashboard.html:84
 msgid "Amount"
 msgstr "Monto"
 
-#: templates/moneitas/dashboard.html:128
+#: templates/moneitas/dashboard.html:85
 msgid "Date"
 msgstr "Fecha"
 
-#: templates/moneitas/dashboard.html:167 templates/moneitas/labels.html:65
+#: templates/moneitas/dashboard.html:146 templates/moneitas/labels.html:65
 msgid "Delete Selected"
 msgstr "Eliminar Seleccionados"
 

@@ -98,18 +98,35 @@
                         <td class="clickable">{{ registro.date|date:"D, M j, Y" }}</td>
                         <td class="clickable">{{ registro.label.name }}</td>
                         <td class="clickable">{{ registro.comment }}</td>
-                        <td>
-                            {% if registro.method == 'credit_card' %}
-                            <i class="fa-regular fa-credit-card"></i>
-                            {% else %}
-                            <i class="fa-solid fa-money-bill-1"></i>
-                            {% endif %}
-                        </td>
-                        <td style="width: 1%;">
+                        <td style="width: 2%;">
+                            
                             <div class="d-flex align-items-center">
-                                <input type="checkbox" name="delete_{{ registro.id }}" style="display:none" id="_delete">
-                                <input type="checkbox" {% if registro.income_paid %}checked{% endif %} onclick="RegisterPaid(this.checked,{{registro.id}})">
+                                {% comment %} Payment Method {% endcomment %}
+                                <i class="payment-method"> 
+                                <i title="Payment method" 
+                                    {% if registro.method == 'credit_card' %}
+                                    class="fa-regular fa-credit-card" 
+                                    onclick="EditRegister('method', 'cash',{{registro.id}})"
+                                    {% else %}
+                                    class="fa-solid fa-money-bill-1"
+                                    onclick="EditRegister('method', 'credit_card',{{registro.id}})"
+                                    {% endif%}>
+                                </i>
+                            </i>
+                                                                
+                                {% comment %} Income paid? {% endcomment %}
+                                <input type="checkbox" class="form-check-input ms-4"
+                                title="Paid?" 
+                                {% if registro.type == 'expense'%} style="visibility:hidden;" {% endif%}
+                                {% if registro.income_paid %}checked{% endif %} 
+                                onclick="EditRegister('income_paid', this.checked,{{registro.id}})">
+
+                                {% comment %} Edit record {% endcomment %}
                                 <a class="fas fa-pencil ms-3" href="{% url 'create_record' edit=registro.id %}"></a>
+                                
+                                {% comment %} Invisible input to manage record deletion {% endcomment %}
+                                <input type="checkbox" name="delete_{{ registro.id }}" style="display:none" id="_delete">
+
                             </div>
                         </td>
 

@@ -27,6 +27,7 @@ class FinancialRecordForm(forms.ModelForm):
         label="O crea una nueva etiqueta (opcional)"
     )
 
+    income_paid = forms.BooleanField(required=False,initial=False,widget=forms.CheckboxInput(attrs={'class': "form-check-input ms-1"}))
 
     date = forms.DateField()
 

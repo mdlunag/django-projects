@@ -31,10 +31,12 @@
         {{ form.method }}
     </p>
 
-    {% comment %} <p name="paid" {% if form.type.value == 'income'%} style="display:none" {% endif %} >
-        <label for="{{ form.income_paid.id_for_label }}">{% translate "Paid?" %}</label>
+    <p name="paid" class="form-switch ps-0" {% if form.type.value == 'income'%} style="display:block" {%else%} style="display:none" {% endif %} >
+        <label for="{{ form.income_paid.id_for_label }}" class="form-check-label">
+            {% translate "Paid?" %}
+        </label>
         {{ form.income_paid }}
-    </p> {% endcomment %}
+    </p>
     
     <p>
         <label for="{{ form.amount.id_for_label }}">{% translate "Amount:" %}</label>
@@ -109,12 +111,13 @@ $(document).ready(function() {
      // Detecta clic en botón de Ingreso
     $('#type-income').click(function() {
         console.log('b');
-        $("p[name='paid']").style.display = 'block';
+        $("p[name='paid']").show();
         cargarEtiquetasDisponibles('income', labelPlaceholder);
     });
 
     // Detecta clic en botón de Gasto
     $('#type-expense').click(function() {
+        $("p[name='paid']").hide();
         cargarEtiquetasDisponibles('expense', labelPlaceholder);
     });
 

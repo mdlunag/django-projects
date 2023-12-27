@@ -240,6 +240,7 @@ def create_financial_record(request, edit=None):
         form = FinancialRecordForm(initial={
             'type': 'income' if record_edit.type == 'income' else 'expense',
             'method': record_edit.method,
+            'income_paid': record_edit.income_paid,
             'amount': record_edit.amount,
             'date': record_edit.date,
             'label_existente': record_edit.label or '',
@@ -347,7 +348,7 @@ def overview_dashboard(request):
         'balance': balance,
         'selected_month': selected_month,
         'month_choices': month_choices,
-        'financial_records': financial_records.order_by('-date'),
+        'financial_records': financial_records.order_by('-date', '-type', 'amount'),
         'filter_form': filter_form,
         'dashboard_disabled': True,
     })

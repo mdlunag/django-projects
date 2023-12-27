@@ -65,24 +65,28 @@ $(document).ready(function() {
            
         }
     });
+    $('.payment-method').click(function() {
+        $('i', this).toggleClass("fa-regular fa-credit-card fa-solid fa-money-bill-1");
+    });
 });
 
 const data = document.currentScript.dataset;
 
 //Mark register as paid
-function RegisterPaid(value,record_id) {
+function EditRegister(field_name, value,record_id) {
     var csrfToken = document.cookie.match(/csrftoken=([\w-]+)/)[1];
     console.log(value);
-    var valuePaid = value==false?false:true;
-    console.log(valuePaid);
     console.log(record_id);
+    var dictData = {};
+    dictData[field_name] = value;
+    console.log(dictData);
     fetch('/' + data.lang + `/moneitas/api/edit_financial_record/${record_id}/`,{
         method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken
             },
-            body: JSON.stringify({"income_paid": valuePaid})
+            body: JSON.stringify(dictData)
         })
    
     .then(response => {
