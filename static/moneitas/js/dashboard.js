@@ -62,11 +62,25 @@ $(document).ready(function() {
                 $(this).closest('tr').css('background', '#ffcdd2');
                 $(this).closest('tr').css('color', '#b71c1c');
             }
+            $("#delete-btn").toggle($(this).find(".delete-checkbox:checked").length = 0);
            
+        }
+        var checkedToDelete = $(".delete-checkbox:checked").length;
+        console.log(checkedToDelete);
+        if(checkedToDelete > 0){
+            $("#delete-btn").show();
+            $(".btn-crear-phone").hide();
+        }else if(checkedToDelete == 0){
+            $("#delete-btn").hide();
+            $(".btn-crear-phone").show();
         }
     });
     $('.payment-method').click(function() {
         $('i', this).toggleClass("fa-regular fa-credit-card fa-solid fa-money-bill-1");
+    });
+
+    $('.btn-delete-phone').click(function() {
+        $('#financial-records').submit();
     });
 });
 
