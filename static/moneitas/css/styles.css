@@ -106,13 +106,13 @@ h1{
 
 /* Estilo para líneas de incomes (verde) */
 .income {
-    background-color: #a5d6a7; /* Color de fondo verde */
+    background: #a5d6a7; /* Color de fondo verde */
     color: #006400; /* Color de texto verde oscuro */
 }
 
 /* Estilo para líneas de expenses (rojo) */
 .expense {
-    background-color: #ffcdd2; /* Color de fondo rojo claro */
+    background: #ffcdd2; /* Color de fondo rojo claro */
     color: #b71c1c; /* Color de texto rojo oscuro */
 }
 

@@ -31,6 +31,13 @@
         {{ form.method }}
     </p>
 
+    <p name="paid" class="form-switch ps-0" {% if form.type.value == 'income'%} style="display:block" {%else%} style="display:none" {% endif %} >
+        <label for="{{ form.income_paid.id_for_label }}" class="form-check-label">
+            {% translate "Paid?" %}
+        </label>
+        {{ form.income_paid }}
+    </p>
+    
     <p>
         <label for="{{ form.amount.id_for_label }}">{% translate "Amount:" %}</label>
         {{ form.amount }}
@@ -58,34 +65,59 @@
 
 
 <script>
-$(document).ready(function() {
-    // Función para cargar las labels disponibles según el type seleccionado
-    function cargarEtiquetasDisponibles(typeSeleccionado, labelPlaceholder) {
+let labelPlaceholder = $('#id_label_existente')[0][0];
+let labelPlaceholderText =  $('#id_label_existente')[0][0].text;
+
+// Función para cargar las labels disponibles según el type seleccionado
+function cargarEtiquetasDisponibles(typeSeleccionado, labelPlaceholder) {
+    var labelsSelect = $('#id_label_existente');
+    console.log('empty');
+    labelsSelect.empty();
+    labelsSelect.append(labelPlaceholder);
+    if (typeSeleccionado){
+        console.log('a'),
+        labelPlaceholder.text = labelPlaceholderText;
         $.ajax({
             url: '/moneitas/get_labels/',  // Cambia la URL a la que corresponda en tu proyecto
             data: {'type': typeSeleccionado},
             dataType: 'json',
             success: function(data) {
                 // Actualiza las opciones del campo de labels
-                var labelsSelect = $('#id_label_existente');
-                labelsSelect.empty();
-                labelsSelect.append(labelPlaceholder);
                 $.each(data.labels, function(index, label) {
                     labelsSelect.append($('<option></option>').attr('value', label.id).text(label.name));
                 });
             }
-        });
-    }
+    })};
+}
 
-    var labelPlaceholder = $('#id_label_existente')[0][0];
+$( window ).on( "load", function(){
+    console.log('onload');
+    if($('#type-income').prop('checked') || $('#type-expense').prop('checked')){
+        var inputType = $('#type-income').prop('checked')?'income':'expense';
+        var labelSelected = $('#id_label_existente').find(':selected');
+        console.log(inputType);
+        console.log('0');
+        console.log(labelSelected);
+        cargarEtiquetasDisponibles(inputType, labelSelected);
+      }
+    else {
+        let labelPlaceholderini = labelPlaceholder;
+        labelPlaceholderini.text = 'Por favor selecciona el tipo';
+        cargarEtiquetasDisponibles('', labelPlaceholderini);
+    };
+}),
+$(document).ready(function() {
 
      // Detecta clic en botón de Ingreso
-    $('.btn-income').click(function() {
+    $('#type-income').click(function() {
+        console.log('b');
+        $("p[name='paid']").show();
         cargarEtiquetasDisponibles('income', labelPlaceholder);
     });
 
     // Detecta clic en botón de Gasto
-    $('.btn-expense').click(function() {
+    $('#type-expense').click(function() {
+        $("p[name='paid']").hide();
         cargarEtiquetasDisponibles('expense', labelPlaceholder);
     });
 
@@ -93,6 +125,3 @@ $(document).ready(function() {
 </script>
 
 {% endblock %}
-
-
-

@@ -27,13 +27,14 @@ class FinancialRecordForm(forms.ModelForm):
         label="O crea una nueva etiqueta (opcional)"
     )
 
+    income_paid = forms.BooleanField(required=False,initial=False,widget=forms.CheckboxInput(attrs={'class': "form-check-input ms-1"}))
 
     date = forms.DateField()
 
 
     class Meta:
         model = FinancialRecord
-        fields = ['type', 'amount', 'date', 'label_existente', 'label_personalizada', 'comment', 'method']
+        fields = ['type', 'amount', 'date', 'label_existente', 'label_personalizada', 'comment', 'method', 'income_paid']
         widgets = {
             'amount': forms.TextInput(attrs={'class': 'rounded-pill'}),
         }

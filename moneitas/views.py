@@ -26,7 +26,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets
-from .serializers import TaskSerializer
+from .serializers import TaskSerializer, FinancialRecordSerializer
 
 
 #To Do list
@@ -198,44 +198,38 @@ def user_logout(request):
 @login_required
 def create_financial_record(request, edit=None):
     if request.method == 'POST':
-        form = FinancialRecordForm(request.POST, user=request.user)
+        record = FinancialRecord.objects.filter(id=edit) if edit else None
+        initial = record.values('type', 'amount', 'comment', 'date', 'method')[0] if record else []
+        form = FinancialRecordForm(request.POST, user=request.user, initial=initial)
         if form.is_valid():
-            record = form.save(commit=False) if not edit else FinancialRecord.objects.get(id=edit)
+            record = record[0] if record else form.save(commit=False)
             etiqueta_existente = form.cleaned_data['label_existente']
             etiqueta_personalizada = form.cleaned_data['label_personalizada']
 
             # Verifica si se seleccionó una etiqueta existente o se proporcionó una etiqueta personalizada.
-            if etiqueta_existente:
-                etiqueta = etiqueta_existente
-            elif etiqueta_personalizada:
-                # Crea una nueva etiqueta personalizada.
-                etiqueta = Label.objects.create(name=etiqueta_personalizada, user=request.user, type=record.type or request.POST.get('type'))
+            if etiqueta_existente or etiqueta_personalizada:
+                etiqueta = etiqueta_existente or Label.objects.create(
+                    name=etiqueta_personalizada, 
+                    user=request.user, 
+                    type=record.type or request.POST.get('type'))
             else:
                 # Maneja el caso en el que no se proporciona ninguna etiqueta.
                 etiqueta = None
-            # Asigna el valor del campo type según la selección del botón de alternancia.
-            type = request.POST.get('type')
-            comment = request.POST.get('comment')
-            method = request.POST.get('method')
+            
 	        # Crea el registro financiero con la etiqueta asociada.
             record.label = etiqueta  # Asocia la etiqueta con el record financiero
-            record.type = type
-            record.comment = comment or ''
-            record.method = method
             #registro.user= User.objects.get(username='aitor.rife@gmail.com')
             record.user = request.user
-            if edit:
-                record.amount = form.cleaned_data['amount']
-                record.date = form.cleaned_data['date']
-                record.comment = form.cleaned_data['comment']
-
+            if edit and form.changed_data:
+                for field in form.changed_data:
+                    setattr(record, field, form.cleaned_data[field])
             record.save()
 
              # Después de crear el registro, obtén el mes del registro creado
             month_record = record.date.month  # Asegúrate de reemplazar "nuevo_registro" con la variable real que contiene el registro recién creado
 
 
-            # Construye la URL de redirección con el parámetro "month" del mes del registro
+            # Construye la URL de redirección con eledit= parámetro "month" del mes del registro
             url_redireccion = reverse('overview_dashboard') + f'?month={month_record}'
 
             # Redirige al usuario a la página del panel de control con el filtro aplicado
@@ -246,6 +240,7 @@ def create_financial_record(request, edit=None):
         form = FinancialRecordForm(initial={
             'type': 'income' if record_edit.type == 'income' else 'expense',
             'method': record_edit.method,
+            'income_paid': record_edit.income_paid,
             'amount': record_edit.amount,
             'date': record_edit.date,
             'label_existente': record_edit.label or '',
@@ -257,21 +252,22 @@ def create_financial_record(request, edit=None):
 
     return render(request, 'moneitas/create_financial_record.html', {'form': form})
 
-from django.db.models import Q
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])  # Aplica la verificación de autenticación solo a esta función
+def edit_financial_record(request, record_id):
+    try:
+        record = FinancialRecord.objects.get(id=record_id)
+    except FinancialRecord.DoesNotExist:
+        return Response({'error': "Financial record doesn't exist"}, status=status.HTTP_404_NOT_FOUND)
 
-
-def filtrar_registros(financial_records, etiqueta, type):
-    # Construye una consulta de filtro dinámica
-    filtro = Q()  # Query vacía inicialmente
-
-    if etiqueta:
-        filtro &= Q(etiqueta=etiqueta)
-
-    if type:
-        filtro &= Q(type=type)
-
-    # Aplica el filtro a los registros financieros
-    return financial_records.filter(filtro)
+    if request.method == 'PATCH':
+        serializer = FinancialRecordSerializer(record, data=request.data,partial=True)
+        print(request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @login_required
 def overview_dashboard(request):
@@ -352,7 +348,7 @@ def overview_dashboard(request):
         'balance': balance,
         'selected_month': selected_month,
         'month_choices': month_choices,
-        'financial_records': financial_records.order_by('-date'),
+        'financial_records': financial_records.order_by('-date', '-type', 'amount'),
         'filter_form': filter_form,
         'dashboard_disabled': True,
     })

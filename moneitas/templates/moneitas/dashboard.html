@@ -1,6 +1,7 @@
 {% extends "moneitas/base_template.html" %}
 {% load humanize %}
 {% load i18n %}
+{% load static %}
 
 
 {% block title %}
@@ -8,6 +9,7 @@
 {% endblock %}
 
 {% block content %}
+
 <div style="text-align: center;">
     <h1>{% translate "Financial Dashboard" %}</h1>
     </br>
@@ -54,50 +56,6 @@
         </div>
     </form>
 
-
-    <script>
-        const filtroForm = document.getElementById('filtro-form');
-        const filtroCheckboxes = document.querySelectorAll('input[name="labels"]');
-        const filtroTipos = document.querySelector('select[name="type"]');
-        const filtroMetodo = document.querySelector('select[name="method"]');
-
-        // Obtén una referencia al formulario y al select
-        const monthSelect = document.getElementById('month');
-
-        // Agrega un evento de cambio al select
-        monthSelect.addEventListener('change', function () {
-            // Envía automáticamente el formulario cuando cambie la selección del mes
-            filtroForm.submit();
-        });
-
-        filtroCheckboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', function () {
-                filtroForm.submit(); // Envía automáticamente el formulario cuando cambia la selección
-            });
-        });
-
-        filtroTipos.addEventListener('change', function () {
-            filtroForm.submit(); // Envía automáticamente el formulario cuando cambia la selección
-        });
-
-        filtroMetodo.addEventListener('change', function () {
-            filtroForm.submit(); // Envía automáticamente el formulario cuando cambia la selección
-        });
-
-
-
-        $(document).ready(function() {
-                // Inicializa el campo Select2
-                $('.django-select2').select2();
-
-                // Detecta cambios en el campo Select2
-                $('.django-select2').on('change', function() {
-                    // Envía automáticamente el formulario cuando cambian las selecciones
-                    $('#filtro-form').submit();
-                });
-            });
-    </script>
-
     {{ filter_form.media.js }}
 
     </div>
@@ -118,8 +76,7 @@
         </div>
     </div>
 
-
-    <form method="post">
+    <form method="post" id="financial-records">
         {% csrf_token %}
         <table class="registros-table">
             <thead>
@@ -134,24 +91,42 @@
             <tbody>
                 {% for registro in financial_records %}
                     <tr class="{% if registro.type == 'income' %}income{% else %}expense{% endif %}">
-                        <td>
+                        <td class="clickable">
                             {% if registro.type == 'expense' %}-{% endif %}
                             {{ registro.amount }}
                         </td>
-                        <td>{{ registro.date|date:"D, M j, Y" }}</td>
-                        <td>{{ registro.label.name }}</td>
-                        <td>{{ registro.comment }}</td>
-                        <td>
-                            {% if registro.method == 'credit_card' %}
-                            <i class="fa-regular fa-credit-card"></i>
-                            {% else %}
-                            <i class="fa-solid fa-money-bill-1"></i>
-                            {% endif %}
-                        </td>
-                        <td style="width: 1%;">
+                        <td class="clickable">{{ registro.date|date:"D, M j, Y" }}</td>
+                        <td class="clickable">{{ registro.label.name }}</td>
+                        <td class="clickable">{{ registro.comment }}</td>
+                        <td style="width: 2%;">
+                            
                             <div class="d-flex align-items-center">
-                                <input type="checkbox" name="delete_{{ registro.id }}">
+                                {% comment %} Payment Method {% endcomment %}
+                                <i class="payment-method"> 
+                                <i title="Payment method" 
+                                    {% if registro.method == 'credit_card' %}
+                                    class="fa-regular fa-credit-card" 
+                                    onclick="EditRegister('method', 'cash',{{registro.id}})"
+                                    {% else %}
+                                    class="fa-solid fa-money-bill-1"
+                                    onclick="EditRegister('method', 'credit_card',{{registro.id}})"
+                                    {% endif%}>
+                                </i>
+                            </i>
+                                                                
+                                {% comment %} Income paid? {% endcomment %}
+                                <input type="checkbox" class="form-check-input ms-4"
+                                title="Paid?" 
+                                {% if registro.type == 'expense'%} style="visibility:hidden;" {% endif%}
+                                {% if registro.income_paid %}checked{% endif %} 
+                                onclick="EditRegister('income_paid', this.checked,{{registro.id}})">
+
+                                {% comment %} Edit record {% endcomment %}
                                 <a class="fas fa-pencil ms-3" href="{% url 'create_record' edit=registro.id %}"></a>
+                                
+                                {% comment %} Invisible input to manage record deletion {% endcomment %}
+                                <input type="checkbox" name="delete_{{ registro.id }}" style="display:none" id="_delete">
+
                             </div>
                         </td>
 
@@ -169,6 +144,9 @@
         </div>
     </form>
 </div>
+
+<script type="text/javascript" data-lang="{{ LANGUAGE_CODE }}" src="{% static 'moneitas/js/dashboard.js' %}"></script>
+
 
 {% endblock %}
 

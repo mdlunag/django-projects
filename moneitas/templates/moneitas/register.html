@@ -7,19 +7,19 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'styles_login.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'moneitas/css/styles_login.css' %}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
     <!-- toggle password !-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
 
-    <link rel="icon" href="{% static 'only-logo.png' %}" type="image/png">
+    <link rel="icon" href="{% static 'moneitas/only-logo.png' %}" type="image/png">
 
 </head>
 <body>
 
     <div class="wrapper bg-white">
-        <div class="h2 text-center"><img  src="{% static 'moneitas-logo.png' %}"></div>
+        <div class="h2 text-center"><img  src="{% static 'moneitas/moneitas-logo.png' %}"></div>
         <div class="h4 text-muted text-center pt-2">Enter your login details</div>
         <form class="pt-3" method="post">
             {% csrf_token %}
