@@ -60,7 +60,44 @@
     }
 
     /* Estilo para el botón "Crear Registro Financiero" */
-    .btn-crear {
-        font-size: 16px; /* Aumentar el tamaño del botón */
+    .btn-crear-pc {
+        display: none; /* Aumentar el tamaño del botón */
+    }
+
+    .btn-delete-pc {
+        display: none; /* Aumentar el tamaño del botón */
+    }
+
+
+    .float{
+        position:fixed;
+        display: inline-block;
+        width:60px;
+        height:60px;
+        bottom:40px;
+        border-radius:50px;
+        text-align:center;
+
+    }
+
+    .btn-crear-phone{
+        background-color:#007BFF;
+        color:#FFF;
+        box-shadow: 2px 2px 3px #999;
+    }
+
+    .btn-delete-phone{        
+        background-color:red;
+        color:white;
+        box-shadow: 2px 2px 3px #a15d5d;
+
+    }
+
+    .my-float{
+        margin-top:22px;
+    }
+    .my-trash{
+        margin-top:20px;
+        margin-left:6px;
     }
 }

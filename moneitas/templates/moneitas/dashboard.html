@@ -12,10 +12,12 @@
 
 <div style="text-align: center;">
     <h1>{% translate "Financial Dashboard" %}</h1>
-    </br>
-     <a href="{% url 'create_record' %}" class="btn-crear mb-3">
-        {% translate "Create Financial Record" %}</a>
-    </br>
+    <p class="btn-crear-pc">
+        </br>
+        <a href="{% url 'create_record' %}" class="btn-crear mb-3">
+            {% translate "Create Financial Record" %}</a>
+        </br>
+    </p>
 
     <form method="get" id="filtro-form" class="d-flex justify-content-center mt-3">
         <div class="form-group text-center mx-3">
@@ -125,7 +127,7 @@
                                 <a class="fas fa-pencil ms-3" href="{% url 'create_record' edit=registro.id %}"></a>
                                 
                                 {% comment %} Invisible input to manage record deletion {% endcomment %}
-                                <input type="checkbox" name="delete_{{ registro.id }}" style="display:none" id="_delete">
+                                <input type="checkbox" name="delete_{{ registro.id }}" style="display:none" id="_delete" class="delete-checkbox">
 
                             </div>
                         </td>
@@ -135,7 +137,7 @@
             </tbody>
         </table>
         </br>
-        <div class="center-button" >
+        <div class="center-button btn-delete-pc" >
             <button type="submit" class="btn btn-delete">
               <span class="mdi mdi-delete mdi-24px"></span>
               <span class="mdi mdi-delete-empty mdi-24px"></span>
@@ -144,6 +146,14 @@
         </div>
     </form>
 </div>
+
+<a href="{% url 'create_record' %}" class="float btn-crear-phone">
+    <i class="fa fa-plus my-float"></i>
+</a>
+
+<a type="submit" id="delete-btn" class="float btn-delete-phone" style="display:none">
+    <i class="fa fa-trash my-trash"></i>
+</a>
 
 <script type="text/javascript" data-lang="{{ LANGUAGE_CODE }}" src="{% static 'moneitas/js/dashboard.js' %}"></script>
 
