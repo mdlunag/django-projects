@@ -30,7 +30,7 @@ class FinancialRecord(models.Model):
     type = models.CharField(max_length=7, choices=Type.choices)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField()
-    label = models.ForeignKey(Label, on_delete=models.CASCADE, blank=True, null=True)
+    label = models.ForeignKey(Label, on_delete=models.SET_DEFAULT, blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Relaciona el registro con el usuario
     method = models.CharField(max_length=12, choices=METHOD_CHOICES, default='cash')
