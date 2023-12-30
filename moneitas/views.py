@@ -226,7 +226,7 @@ def create_financial_record(request, edit=None):
             record.save()
 
              # Después de crear el registro, obtén el mes del registro creado
-            month_record = record.date.month  # Asegúrate de reemplazar "nuevo_registro" con la variable real que contiene el registro recién creado
+            month_record = f'{record.date.month}-{record.date.year}' # Asegúrate de reemplazar "nuevo_registro" con la variable real que contiene el registro recién creado
 
 
             # Construye la URL de redirección con eledit= parámetro "month" del mes del registro
