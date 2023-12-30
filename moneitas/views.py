@@ -275,12 +275,12 @@ def overview_dashboard(request):
     current_date = date.today()
 
     # Obtener el mes seleccionado del parámetro GET, si está presente
-    selected_month = request.GET.get('month', current_date.month)
+    selected_date= request.GET.get('month', f'{current_date.month}-{current_date.year}')
 
     # Calcular el primer y último día del mes seleccionado (si no es "Todos")
-    if selected_month != 'Todos':
-        selected_month = int(selected_month)
-        first_day_of_month = current_date.replace(month=selected_month, day=1)
+    if selected_date != 'Todos':
+        selected_month, selected_year = selected_date.split("-")
+        first_day_of_month = current_date.replace(year=int(selected_year),month=int(selected_month), day=1)
         last_day_of_month = first_day_of_month.replace(
             month=first_day_of_month.month % 12 + 1,
             year=first_day_of_month.year + first_day_of_month.month // 12,
@@ -291,13 +291,12 @@ def overview_dashboard(request):
         last_day_of_month = None
 
     # Obtener una lista de meses con datos
-    months_with_data = FinancialRecord.objects.filter(
-        date__year=current_date.year
-    ).dates('date', 'month')
+    months_with_data = FinancialRecord.objects.filter(user=request.user
+    ).dates('date', 'month','DESC')
 
     # Convertir los objetos de fecha a names de mes legibles
     lang = request.LANGUAGE_CODE
-    month_choices = [(month.month, get_month_name(month.month, lang).capitalize()) for month in months_with_data]
+    month_choices = [(f'{month.month}-{month.year}', get_month_name(month.month, lang).capitalize() + ' ' + str(month.year)) for month in months_with_data]
     month_choices += [('Todos', 'Todos')]
 
     # Filtrar registros financieros según el rango de fechas (si no es "Todos")
@@ -346,7 +345,7 @@ def overview_dashboard(request):
         'incomes': incomes,
         'expenses': expenses,
         'balance': balance,
-        'selected_month': selected_month,
+        'selected_month': selected_date,
         'month_choices': month_choices,
         'financial_records': financial_records.order_by('-date', '-type', 'amount'),
         'filter_form': filter_form,
