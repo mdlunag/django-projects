@@ -29,8 +29,11 @@ class FinancialRecordForm(forms.ModelForm):
 
     income_paid = forms.BooleanField(required=False,initial=False,widget=forms.CheckboxInput(attrs={'class': "form-check-input ms-1"}))
 
-    date = forms.DateField()
-
+    date = forms.DateField(
+        widget=forms.DateInput(
+            format="%Y-%m-%d", 
+            attrs={"type": "date"}),
+            input_formats=["%Y-%m-%d"])
 
     class Meta:
         model = FinancialRecord
