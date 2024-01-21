@@ -19,12 +19,17 @@ class Type(models.TextChoices):
         EXPENSE = 'expense', _('Expense')
 
 class Label(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     type = models.CharField(max_length=7, choices=Type.choices)
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Relaciona el registro con el usuario
 
     def __str__(self):
         return f"{self.name} ({self.type})"
+
+    class Meta:
+         constraints = [
+              models.UniqueConstraint(fields=['name', 'user'], name='unique_label_per_user')
+         ]
 
 class FinancialRecord(models.Model):
     type = models.CharField(max_length=7, choices=Type.choices)
