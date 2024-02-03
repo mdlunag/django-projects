@@ -38,7 +38,7 @@ class FinancialRecord(models.Model):
     label = models.ForeignKey(Label, on_delete=models.SET_NULL, blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Relaciona el registro con el usuario
-    method = models.CharField(max_length=12, choices=METHOD_CHOICES, default='cash')
+    method = models.CharField(max_length=12, choices=METHOD_CHOICES, default='credit_card')
     income_paid = models.BooleanField(default=False)
 
 
