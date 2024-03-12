@@ -47,16 +47,6 @@ h1{
 }
 
 
-.dashboard-item {
-    text-align: center; /* Centrar el contenido en cada item */
-    margin: 0.5em; /* Espacio entre elementos */
-    padding: 1em; /* Espacio interno en cada elemento */
-    border: 1px solid #ccc; /* Borde para resaltar los elementos */
-    border-radius: 5px; /* Borde redondeado */
-    flex-grow: 1; /* Hacer que los elementos del dashboard tengan el mismo tamaño */
-
-}
-
 .dashboard-content {
     display: flex;
     justify-content: center; /* Centrar horizontalmente */

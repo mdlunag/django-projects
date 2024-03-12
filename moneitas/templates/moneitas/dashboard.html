@@ -62,19 +62,54 @@
 
     </div>
 
-
     <div class="dashboard-row">
-        <div class="dashboard-item">
-            <h4>{% translate "Incomes" %}</h4>
-            <p>{{ incomes }}</p>
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <p>
+                        <h4>{% translate "Incomes" %}</h4>
+                        <span id="paidIncomes">{{ paid_incomes }}</span>/{{ incomes }}
+                    </p>
+                </div>
+                <div class="flip-card-back">
+                    </p>
+                        <h4>{% translate "Incomes" %}</h4>
+                        Paid/Total
+                    </p>
+                </div>
+            </div>
         </div>
-        <div class="dashboard-item">
-            <h4>{% translate "Expenses" %}</h4>
-            <p>{{ expenses }}</p>
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <p>
+                        <h4>{% translate "Expenses" %}</h4>
+                        {{ expenses }}
+                    </p>
+                </div>
+                <div class="flip-card-back">
+                    <p>
+                        <h4>{% translate "Expenses" %}</h4>
+                        dul
+                    </p>
+                </div>
+            </div>
         </div>
-        <div class="dashboard-item">
-            <h4>{% translate "Result" %}</h4>
-            <p>{{ balance }}</p>
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <p>
+                        <h4>{% translate "Result" %}</h4>
+                        {{ balance }}
+                    </p>
+                </div>
+                <div class="flip-card-back">
+                    <p>
+                        <h4>{% translate "Result" %}</h4>
+                        bo
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -121,7 +156,7 @@
                                 title="Paid?" 
                                 {% if registro.type == 'expense'%} style="visibility:hidden;" {% endif%}
                                 {% if registro.income_paid %}checked{% endif %} 
-                                onclick="EditRegister('income_paid', this.checked,{{registro.id}})">
+                                onclick="EditRegister('income_paid', this.checked,{{registro.id}});">
 
                                 {% comment %} Edit record {% endcomment %}
                                 <a class="fas fa-pencil ms-3" href="{% url 'create_record' edit=registro.id %}"></a>

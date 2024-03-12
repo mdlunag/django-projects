@@ -269,6 +269,22 @@ def edit_financial_record(request, record_id):
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated]) 
+def get_financial_record(request, record_id):
+    try:
+        record = FinancialRecord.objects.get(id=record_id)
+    except FinancialRecord.DoesNotExist:
+        return Response({'error': "Financial record doesn't exist"}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = FinancialRecordSerializer(record, data=request.data,partial=True)
+        if serializer.is_valid():
+            return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response('Error', status=status.HTTP_200_OK)
+
+
 @login_required
 def overview_dashboard(request):
     # Obtener la fecha actual
@@ -327,6 +343,7 @@ def overview_dashboard(request):
     if request.user.username != 'admin':
         financial_records = financial_records.filter(user=request.user)
 
+    paid_incomes =  financial_records.filter(type='income', income_paid=True).aggregate(Sum('amount'))['amount__sum'] or 0
     incomes = financial_records.filter(type='income').aggregate(Sum('amount'))['amount__sum'] or 0
     expenses = financial_records.filter(type='expense').aggregate(Sum('amount'))['amount__sum'] or 0
 
@@ -342,6 +359,7 @@ def overview_dashboard(request):
 
     return render(request, 'moneitas/dashboard.html', {
         'current_date': current_date,
+        'paid_incomes':  paid_incomes,
         'incomes': incomes,
         'expenses': expenses,
         'balance': balance,

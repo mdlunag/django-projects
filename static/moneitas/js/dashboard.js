@@ -92,11 +92,8 @@ const data = document.currentScript.dataset;
 //Mark register as paid
 function EditRegister(field_name, value,record_id) {
     var csrfToken = document.cookie.match(/csrftoken=([\w-]+)/)[1];
-    console.log(value);
-    console.log(record_id);
     var dictData = {};
     dictData[field_name] = value;
-    console.log(dictData);
     fetch('/' + data.lang + `/moneitas/api/edit_financial_record/${record_id}/`,{
         method: 'PATCH',
             headers: {
@@ -117,4 +114,47 @@ function EditRegister(field_name, value,record_id) {
     
         })
         .catch(error => console.error('Error:', error));
+    if (field_name == "income_paid"){
+        var paidElement = document.getElementById("paidIncomes");
+        var currentPaidIncomes =  parseInt(paidElement.textContent);
+        getFinancialRecord(record_id, csrfToken).then(
+            result => {
+            registerAmount = parseInt(result.amount);
+            if (value){
+                paidElement.textContent = currentPaidIncomes+ registerAmount;
+            }else{
+                paidElement.textContent = currentPaidIncomes- registerAmount;
+            }
+            console.log(registerAmount, paidElement.textContent)
+
+        }
+        ).catch(error => {
+            // Manejar cualquier error aquí
+            console.error('Error fetching financial record:', error);
+        });
+    }
 };
+
+
+async function getFinancialRecord(record_id, csrfToken) {
+    try {
+        const response = await fetch(`/${data.lang}/moneitas/api/get_financial_record/${record_id}/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch financial record');
+        }
+
+        const registerData = await response.json();
+        console.log(registerData)
+        return registerData;
+    } catch (error) {
+        console.error('Error fetching financial record:', error);
+        return null;
+    }
+}
