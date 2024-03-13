@@ -91,18 +91,20 @@ h1{
 .registros-table {
     width: 100%; /* Toma el 100% del ancho del contenedor de registros */
     border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 
 /* Estilo para líneas de incomes (verde) */
 .income {
-    background: #a5d6a7; /* Color de fondo verde */
+    background: #d0e6d1; /* Color de fondo verde */
     color: #006400; /* Color de texto verde oscuro */
 }
 
 /* Estilo para líneas de expenses (rojo) */
 .expense {
-    background: #ffcdd2; /* Color de fondo rojo claro */
+    background: #f3d9db; /* Color de fondo rojo claro */
     color: #b71c1c; /* Color de texto rojo oscuro */
 }
 
@@ -112,6 +114,8 @@ h1{
 .registros-table th {
     padding: 8px; /* Ajusta el relleno según tus preferencias */
     margin: 0; /* Elimina los márgenes predeterminados */
+    border-bottom: 0.15em solid #ffffff;
+    padding: 8px;
 }
 
 .center-button {
@@ -144,5 +148,3 @@ display: none;
 .btn-delete-phone{
     display: none;
     }
-
-

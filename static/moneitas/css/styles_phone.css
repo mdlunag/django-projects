@@ -13,11 +13,11 @@
 
     /* Estilo para el título */
     h2 {
-        font-size: 24px; /* Reducir el tamaño del título */
+        font-size: 20px; /* Reducir el tamaño del título */
     }
 
     h4 {
-        font-size: 19px; /* Reducir el tamaño del título */
+        font-size: 17px; /* Reducir el tamaño del título */
     }
 
 
@@ -44,7 +44,7 @@
 
     /* Estilo para la tabla de registros */
     .registros-table {
-        font-size: 14px; /* Reducir el tamaño de fuente de la tabla */
+        font-size: 12px; /* Reducir el tamaño de fuente de la tabla */
     }
 
     /* Estilo para las celdas de la tabla en dispositivos móviles */
