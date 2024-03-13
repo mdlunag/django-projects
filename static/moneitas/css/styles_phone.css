@@ -11,6 +11,9 @@
         width:95%;
     }
 
+    h1{
+        font-size: 22px ;
+    }
     /* Estilo para el título */
     h2 {
         font-size: 20px; /* Reducir el tamaño del título */
@@ -100,4 +103,57 @@
         margin-top:20px;
         margin-left:6px;
     }
+
+    /* Estilos para el select personalizado */
+    select {
+        font-size:11px !important;
+        margin: 0.05;
+      }
+
+    .select2-container{
+        min-height: 25px !important;
+    }
+    .select2-selection {
+        font-size: 12px; /* Adjust font size */
+        height: 24px !important; /* Adjust height */
+        line-height: 1.5; /* Adjust line height */
+    }
+    .select2-results__options {
+        font-size: 12px; /* Ajusta el tamaño de la fuente para el texto del desplegable */
+    }
+
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        padding-left: 10px;
+        width: 100%;
+        transition: height 0.5s ease; /* Transición suave para la altura */
+        z-index: 1000;
+    }
+
+    .navbar.small {
+        height: 50px; /* Altura reducida de la barra de navegación */
+    }
+
+    .navbar-items {
+        display: flex;
+    }
+
+    .navbar-items a {
+        color: #fff;
+        text-decoration: none;
+        padding: 15px;
+    }
+
+    .main{
+        margin-top:100px
+    }
+
+    /* Estilos para el logotipo */
+    .logo {
+    max-width: 100%; /* Garantiza que el logotipo no se extienda más allá de su contenedor */
+    height: auto; /* Permite que el logotipo mantenga sus proporciones originales */
+}
+   
 }
