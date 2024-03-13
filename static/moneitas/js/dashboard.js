@@ -55,11 +55,11 @@ $(document).ready(function() {
         else {
             _delete.checked = false;
             if(this.closest('tr').className == 'income'){
-                $(this).closest('tr').css('background', '#a5d6a7');
+                $(this).closest('tr').css('background', '#d0e6d1');
                 $(this).closest('tr').css('color', '#006400');
             }
             else {
-                $(this).closest('tr').css('background', '#ffcdd2');
+                $(this).closest('tr').css('background', '#f3d9db');
                 $(this).closest('tr').css('color', '#b71c1c');
             }
             if (screen.width <768){
