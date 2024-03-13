@@ -5,7 +5,7 @@
     text-align: center; /* Centrar el contenido en cada item */
     flex-grow: 1; /* Hacer que los elementos del dashboard tengan el mismo tamaño */
     height:100px;
-    margin: 0.5em
+    margin: 0.3em
 
   }
   
