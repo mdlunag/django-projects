@@ -114,7 +114,7 @@ h1{
 .registros-table th {
     padding: 8px; /* Ajusta el relleno según tus preferencias */
     margin: 0; /* Elimina los márgenes predeterminados */
-    border-bottom: 0.15em solid #ffffff;
+    border-bottom: 0.2em solid #ffffff;
     padding: 8px;
 }
 

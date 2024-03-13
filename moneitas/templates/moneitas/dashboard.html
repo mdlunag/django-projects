@@ -10,7 +10,7 @@
 
 {% block content %}
 
-<div style="text-align: center;">
+<div style="text-align: center" class="main">
     <h1>{% translate "Financial Dashboard" %}</h1>
     <p class="btn-crear-pc">
         </br>
@@ -20,11 +20,11 @@
     </p>
 
     <form method="get" id="filtro-form" class="d-flex justify-content-center mt-3">
-        <div class="form-group text-center mx-3">
+        <div class="form-group text-center mx-1">
             <label for="month">
                 {% translate "Month:" %}
             </label>
-            <select id="month" name="month">
+            <select id="month" name="month" class="input-xs">
                 {% for month in month_choices %}
                     <option value="{{ month.0 }}" {% if month.0 == selected_month %}selected{% endif %}>
                         {{ month.1 }}
@@ -34,14 +34,14 @@
         </div>
 
 
-        <div class="form-group text-center mx-3">
+        <div class="form-group text-center mx-1">
             <label for="{{ filter_form.type.id_for_label }}">
                 {% translate "Type:" %}
             </label>
             {{ filter_form.type }}
         </div>
 
-        <div class="form-group text-center mx-3">
+        <div class="form-group text-center mx-1">
             <label for="{{ filter_form.method.id_for_label }}">
                 {% translate "Method:" %}
             </label>
@@ -49,7 +49,7 @@
         </div>
 
         <div class="d-flex">
-            <div class="form-group mx-3">
+            <div class="form-group mx-2">
                 <label for="{{ filter_form.labels.id_for_label }}">
                     {% translate "Labels:" %}
                 </label>
@@ -60,7 +60,6 @@
 
     {{ filter_form.media.js }}
 
-    </div>
 
     <div class="dashboard-row">
         <div class="flip-card">
@@ -116,15 +115,6 @@
     <form method="post" id="financial-records">
         {% csrf_token %}
         <table class="registros-table">
-            <thead>
-                <tr>
-                    <th>{% translate "Amount" %}</th>
-                    <th>{% translate "Date" %}</th>
-                    <th>{% translate "Label" %}</th>
-                    <th>{% translate "Comment" %}</th>
-                    <th></th>
-                </tr>
-            </thead>
             <tbody>
                 {% for registro in financial_records %}
                     <tr class="{% if registro.type == 'income' %}income{% else %}expense{% endif %}">
@@ -180,6 +170,7 @@
             </button>
         </div>
     </form>
+</div>
 </div>
 
 <a href="{% url 'create_record' %}" class="float btn-crear-phone">
