@@ -2,9 +2,8 @@
 .flip-card {
     background-color: transparent;
     perspective: 1000px; /* Remove this if you don't want the 3D effect */
-    text-align: center; /* Centrar el contenido en cada item */
     flex-grow: 1; /* Hacer que los elementos del dashboard tengan el mismo tamaño */
-    height:100px;
+    height:80px;
     margin: 0.2em
 
   }
@@ -15,6 +14,7 @@
     height:100%;
     padding: 1px;
     transition: transform 0.8s;
+    font-size: 14px;
     transform-style: preserve-3d;
     border: 1px solid #ccc; /* Borde para resaltar los elementos */
     border-radius: 5px; /* Borde redondeado */
@@ -33,6 +33,7 @@
     width: 100%;
     height: 100%;
     padding: 5px;
+    margin-top: 7px;
     -webkit-backface-visibility: hidden; /* Safari */
     backface-visibility: hidden;
   }
