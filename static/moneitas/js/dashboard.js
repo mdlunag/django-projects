@@ -166,7 +166,7 @@ $(document).ready(function() {
 
     $(window).scroll(function() {
         var scrollPosition = $(this).scrollTop();
-        var navbarHeight = 100 - scrollPosition;
+        var navbarHeight = 100 - scrollPosition*0.8;
         navbarHeight = navbarHeight < 50 ? 50 : navbarHeight; // Limitar la altura mínima
 
         // Reduce gradualmente la altura de la barra de navegación

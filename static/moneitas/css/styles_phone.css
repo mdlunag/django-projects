@@ -20,11 +20,11 @@
     }
 
     h4 {
-        font-size: 17px; /* Reducir el tamaño del título */
+        font-size: 15px; /* Reducir el tamaño del título */
     }
 
 
-    /* Estilo para el botón de estadísticas */
+    /* Estilo para el botón de estadísticas *6
     form {
         margin: 10px 0; /* Agregar espacio entre el formulario y los elementos anteriores */
     }
@@ -126,7 +126,7 @@
         position: fixed;
         top: 0;
         left: 0;
-        padding-left: 10px;
+        padding-left: 15px;
         width: 100%;
         transition: height 0.5s ease; /* Transición suave para la altura */
         z-index: 1000;
@@ -155,5 +155,6 @@
     max-width: 100%; /* Garantiza que el logotipo no se extienda más allá de su contenedor */
     height: auto; /* Permite que el logotipo mantenga sus proporciones originales */
 }
+
    
 }
