@@ -27,7 +27,6 @@
     /* Estilo para el botón de estadísticas *6
     form {
         margin: 10px 0; /* Agregar espacio entre el formulario y los elementos anteriores */
-    }
 
     select {
         width: 100%; /* Hacer que el select ocupe el ancho completo */
@@ -105,17 +104,11 @@
     }
 
     /* Estilos para el select personalizado */
-    select {
-        font-size:11px !important;
-        margin: 0.05;
-      }
-
     .select2-container{
         min-height: 25px !important;
     }
     .select2-selection {
         font-size: 12px; /* Adjust font size */
-        height: 24px !important; /* Adjust height */
         line-height: 1.5; /* Adjust line height */
     }
     .select2-results__options {

@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'moneitas/css/styles_phone_dashboard.css' %}">
 
 <div style="text-align: center" class="main">
     <h1>{% translate "Financial Dashboard" %}</h1>
@@ -170,7 +171,9 @@
 <a type="submit" id="delete-btn" class="float btn-delete-phone" style="display:none">
     <i class="fa fa-trash my-trash"></i>
 </a>
+<script>
 
+</script>
 <script type="text/javascript" data-lang="{{ LANGUAGE_CODE }}" src="{% static 'moneitas/js/dashboard.js' %}"></script>
 
 
