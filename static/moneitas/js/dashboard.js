@@ -195,11 +195,3 @@ $(document).ready(function() {
     });
 });
 
-window.addEventListener('DOMContentLoaded', function() {
-    var screenWidth = window.innerWidth || document.documentElement.clientWidth;
-    var div = document.querySelector('.container');
-
-    if (screenWidth <= 768) {
-        div.classList.add('specific-class');
-    }
-});
