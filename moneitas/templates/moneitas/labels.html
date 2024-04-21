@@ -1,13 +1,21 @@
 {% extends "moneitas/base_template.html" %}
 {% load i18n %}
+{% load static %}
 
 {% block title %}
 {% translate "Labels" %}
 {% endblock %}
 
 {% block content %}
-<div style="text-align: center;">
+<div style="text-align: center" class="main">
+
     <h1>{% translate "Labels" %}</h1>
+    <p class="btn-crear-pc">
+        </br>
+        <a href="{% url 'create_label' %}" class="btn-crear mb-3">
+            {% translate "Create Label" %}</a>
+        </br>
+    </p>
 
     <form method="get" id="filtro-form" class="d-flex justify-content-center mt-3">
         <div class="form-group text-center mx-3">
@@ -25,11 +33,7 @@
 
     </script>
 
-    </br>
-     <a href="{% url 'create_label' %}" class="btn-crear mb-3">{% translate "Create Label" %}</a>
-    </br>
-
-    <form method="post">
+    <form method="post" id="labels-form">
         {% csrf_token %}
         <table class="labels-table">
             <thead>
@@ -42,13 +46,13 @@
             <tbody>
                 {% for label in labels %}
                     <tr class="{% if label.type == 'income' %}income{% else %}expense{% endif %}">
-                        <td>{{ label.name }}</td>
+                        <td class="clickable">{{ label.name }}</td>
                         {% comment %} <td>
                             {{ label.get_type_display }}
                         </td> {% endcomment %}
                         <td style="width: 1%;">
                             <div class="d-flex align-items-center">
-                                <input type="checkbox" name="delete_{{ label.id }}">
+                                <input type="checkbox" name="delete_{{ label.id }}" style="display:none" id="_delete" class="delete-checkbox">
                                 <a class="fas fa-pencil ms-3" href="{% url 'create_label' edit=label.id %}"></a>
                             </div>
                         </td>
@@ -58,14 +62,18 @@
             </tbody>
         </table>
         </br>
-       <div class="center-button" >
-            <button type="submit" class="btn btn-delete">
-              <span class="mdi mdi-delete mdi-24px"></span>
-              <span class="mdi mdi-delete-empty mdi-24px"></span>
-              <span>{% translate "Delete Selected" %}</span>
-            </button>
-        </div>
+        {% include 'moneitas/delete_pc_button.html' %}
+
     </form>
 </div>
+</div>
+<a href="{% url 'create_label' %}" class="float btn-crear-phone">
+    <i class="fa fa-plus my-float"></i>
+  </a>
+  
+{% include 'moneitas/delete_button_phone.html' %}
+
+<script type="text/javascript" data-lang="{{ LANGUAGE_CODE }}" data-formName="labels-form" src="{% static 'moneitas/js/list_common.js' %}"></script>
+
 {% endblock %}
 

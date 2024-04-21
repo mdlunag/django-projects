@@ -30,6 +30,8 @@
 
     select {
         width: 100%; /* Hacer que el select ocupe el ancho completo */
+        font-size:11px !important;
+        margin: 0.05;
     }
 
     button[type="submit"] {
@@ -37,21 +39,20 @@
         margin: 10px auto; /* Centrar el botón horizontalmente */
     }
 
-    /* Estilo para los elementos del dashboard */
-    .dashboard-item {
-        width: 100%; /* Hacer que los elementos del dashboard ocupen el ancho completo */
-        margin: 10px 0; /* Agregar espacio entre los elementos del dashboard */
-        padding: 10px; /* Aumentar el espacio interno */
-    }
-
     /* Estilo para la tabla de registros */
-    .registros-table {
+    .registros-table,
+    .recurrent-records-table,
+    .labels-table{
         font-size: 12px; /* Reducir el tamaño de fuente de la tabla */
     }
 
     /* Estilo para las celdas de la tabla en dispositivos móviles */
     .registros-table td,
-    .registros-table th {
+    .registros-table th,
+    .recurrent-records-table td,
+    .recurrent-records-table th,
+    .labels-table td,
+    .labels-table th {
         padding: 6px; /* Reducir el espacio entre las celdas */
     }
 
