@@ -138,10 +138,31 @@ class RecurrentRecordForm(forms.ModelForm):
             format="%Y-%m-%d", 
             attrs={"type": "date"}),
             input_formats=["%Y-%m-%d"])
+    
+    cadence_position = forms.IntegerField(
+        min_value=1,
+        widget=forms.NumberInput(attrs={'min': 1, 'required': True}),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        cadence_type = cleaned_data.get('cadence_type')
+        cadence_position = cleaned_data.get('cadence_position')
+        if cadence_type == 'weekly' and (cadence_position < 1 or cadence_position > 7):
+            raise forms.ValidationError(
+                "For weekly cadence, cadence position must be between 1 and 7."
+            )
+
+        elif cadence_type == "monthly" and cadence_position > 31:
+            raise forms.ValidationError(
+                "For monthly cadence, cadence position must be between 1 and 31."
+            )
+
+        return cleaned_data
 
     class Meta:
         model = RecurrentRecord
-        fields = ['comment', 'type', 'amount', 'date_from', 'date_to', 'label_existente', 'label_personalizada', 'method', 'cadence_type']
+        fields = ['comment', 'type', 'amount', 'date_from', 'date_to', 'label_existente', 'label_personalizada', 'method', 'cadence_type', 'cadence_position']
         widgets = {
             'amount': forms.TextInput(attrs={'class': 'rounded-pill'}),
         }

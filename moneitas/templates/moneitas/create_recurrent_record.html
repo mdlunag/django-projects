@@ -41,6 +41,11 @@
     </p>
 
     <p>
+        <label for="{{ form.cadence_position.id_for_label }}">{% translate "Cadence Day of Month/Week:" %}</label>
+        {{ form.cadence_position }}
+    </p>
+
+    <p>
         <label for="{{ form.date_from.id_for_label }}">{% translate "Date From:" %}</label>
         {{ form.date_from}}
     </p>
@@ -63,8 +68,26 @@
         <input type="text" class="rounded-pill" id="id_comment" name="comment"value="{{ form.comment.value }}">
     </div>
 
+    {% if form.errors %}
+    <div class="error-container">
+        <ul class="error-list">
+        {% for field, error_list in form.errors.items %}
+            {% for error in error_list %}
+            <li class="error-item">
+                <!-- Display error message with warning icon -->
+                <span class="error-icon">&#9888;</span> <!-- Unicode for warning icon -->
+                {{ error }}
+            </li>
+            {% endfor %}
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
     <button type="submit" class="btn btn-primary">{% translate "Save" %}</button>
 </form>
+
+
 
 <script type="text/javascript" data-lang="{{ LANGUAGE_CODE }}" src="{% static 'moneitas/js/create_common.js' %}"></script>
 

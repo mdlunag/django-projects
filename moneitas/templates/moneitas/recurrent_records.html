@@ -40,7 +40,7 @@
             <thead>
                 <tr>
                     <th>{% translate "Amount" %}</th>
-                    <th>{% translate "Cadence" %}</th>
+                    <th>{% translate "Cadence (day)" %}</th>
                     <th>{% translate "Date From" %}</th>
                     <th>{% translate "Date To" %}</th>
                     <th>{% translate "Label" %}</th>
@@ -55,7 +55,7 @@
                             {% if record.type == 'expense' %}-{% endif %}
                             {{ record.amount }}
                         </td>
-                        <td class="clickable">{{ record.get_cadence_type_display }}</td>
+                        <td class="clickable">{{ record.get_cadence_type_display }} ({{ record.cadence_position }})</td>
                         <td class="clickable">{{ record.date_from|date:"D, M j, Y" }}</td>
                         <td class="clickable">{{ record.date_to|date:"D, M j, Y" }}</td>
                         <td class="clickable">{{ record.label.name }}</td>
