@@ -124,10 +124,10 @@
                                 <i title="Payment method" 
                                     {% if registro.method == 'credit_card' %}
                                     class="fa-regular fa-credit-card" 
-                                    onclick="EditRegister('method', 'cash',{{registro.id}})"
+                                    onclick="EditRegister('method', 'cash', 'financial_record', {{registro.id}})"
                                     {% else %}
                                     class="fa-solid fa-money-bill-1"
-                                    onclick="EditRegister('method', 'credit_card',{{registro.id}})"
+                                    onclick="EditRegister('method', 'credit_card', 'financial_record', {{registro.id}})"
                                     {% endif%}>
                                 </i>
                             </i>
@@ -137,7 +137,7 @@
                                 title="Paid?" 
                                 {% if registro.type == 'expense'%} style="visibility:hidden;" {% endif%}
                                 {% if registro.income_paid %}checked{% endif %} 
-                                onclick="EditRegister('income_paid', this.checked,{{registro.id}});">
+                                onclick="EditRegister('income_paid', this.checked, 'financial_record', {{registro.id}});">
 
                                 {% comment %} Edit record {% endcomment %}
                                 <a class="fas fa-pencil ms-3" href="{% url 'create_record' edit=registro.id %}"></a>
@@ -171,11 +171,9 @@
 <a type="submit" id="delete-btn" class="float btn-delete-phone" style="display:none">
     <i class="fa fa-trash my-trash"></i>
 </a>
-<script>
 
-</script>
 <script type="text/javascript" data-lang="{{ LANGUAGE_CODE }}" src="{% static 'moneitas/js/dashboard.js' %}"></script>
-
+<script type="text/javascript" data-lang="{{ LANGUAGE_CODE }}" src="{% static 'moneitas/js/list_common.js' %}"></script>
 
 {% endblock %}
 

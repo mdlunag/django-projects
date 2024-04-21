@@ -1,0 +1,105 @@
+{% extends "moneitas/base_template.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+{% translate "Recurrent Records" %}
+{% endblock %}
+
+{% block content %}
+<div style="text-align: center;">
+    <h1>{% translate "Recurrent Records" %}</h1>
+
+    <form method="get" id="filtro-form" class="d-flex justify-content-center mt-3">
+        <div class="form-group text-center mx-3">
+                <label for="{{ filter_form.type.id_for_label }}">{% translate "Type" %}:</label>
+                {{ filter_form.type }}
+        </div>
+        <div class="form-group text-center mx-3">
+            <label for="{{ filter_form.cadence_type.id_for_label }}">{% translate "Cadence" %}:</label>
+            {{ filter_form.cadence_type }}
+    </div>
+    </form>
+    <script>
+        const filtroForm = document.getElementById('filtro-form');
+        const filtroTipos = document.querySelector('select[name="type"]');
+
+        filtroTipos.addEventListener('change', function () {
+            filtroForm.submit(); // Envía automáticamente el formulario cuando cambia la selección
+        });
+
+    </script>
+
+    </br>
+     <a href="{% url 'create_recurrent_record' %}" class="btn-crear mb-3">{% translate "Create Recurrent Record" %}</a>
+    </br>
+
+    <form method="post" id="recurrent-records">
+        {% csrf_token %}
+        <table class="recurrent-records-table">
+            <thead>
+                <tr>
+                    <th>{% translate "Amount" %}</th>
+                    <th>{% translate "Cadence" %}</th>
+                    <th>{% translate "Date From" %}</th>
+                    <th>{% translate "Date To" %}</th>
+                    <th>{% translate "Label" %}</th>
+                    <th>{% translate "Comment" %}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in recurrent_records %}
+                    <tr class="{% if record.type == 'income' %}income{% else %}expense{% endif %}">
+                        <td class="clickable">
+                            {% if record.type == 'expense' %}-{% endif %}
+                            {{ record.amount }}
+                        </td>
+                        <td class="clickable">{{ record.get_cadence_type_display }}</td>
+                        <td class="clickable">{{ record.date_from|date:"D, M j, Y" }}</td>
+                        <td class="clickable">{{ record.date_to|date:"D, M j, Y" }}</td>
+                        <td class="clickable">{{ record.label.name }}</td>
+                        <td class="clickable">{{ record.comment }}</td>
+                        <td style="width: 2%;">
+                            
+                        <div class="d-flex align-items-center">
+                                {% comment %} Payment Method {% endcomment %}
+                            <i class="payment-method"> 
+                                <i title="Payment method" 
+                                    {% if record.method == 'credit_card' %}
+                                    class="fa-regular fa-credit-card" 
+                                    onclick="EditRegister('method', 'cash', 'recurrent_record', {{record.id}})"
+                                    {% else %}
+                                    class="fa-solid fa-money-bill-1"
+                                    onclick="EditRegister('method', 'credit_card', 'recurrent_record', {{record.id}})"
+                                    {% endif%}>
+                                </i>
+                            </i>
+                                                                
+                            {% comment %} Edit record {% endcomment %}
+                            <a class="fas fa-pencil ms-3" href="{% url 'create_recurrent_record' edit=record.id %}"></a>
+                            
+                            {% comment %} Invisible input to manage record deletion {% endcomment %}
+                            <input type="checkbox" name="delete_{{ record.id }}" style="display:none" id="_delete" class="delete-checkbox">
+
+                            </div>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </br>
+        <div class="center-button btn-delete-pc" >
+            <button type="submit" class="btn btn-delete">
+              <span class="mdi mdi-delete mdi-24px"></span>
+              <span class="mdi mdi-delete-empty mdi-24px"></span>
+              <span>{% translate "Delete Selected" %}</span>
+            </button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" data-lang="{{ LANGUAGE_CODE }}" src="{% static 'moneitas/js/list_common.js' %}"></script>
+
+{% endblock %}

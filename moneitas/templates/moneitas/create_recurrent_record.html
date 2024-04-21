@@ -2,17 +2,16 @@
 {% load i18n %}
 {% load static %}
 
-{% block title %}{% translate "Create Financial Record" %}{% endblock %}
+{% block title %}{% translate "Create Recurrent Record" %}{% endblock %}
 
-{% block back_url %}{% url 'overview_dashboard' %}{% endblock %}
+{% block back_url %}{% url 'list_recurrent_records' %}{% endblock %}
 
 {% block content %}
 
 
-<h1 class="mb-4">{% translate "Financial Record" %}</h1>
-<form method="post" id="registro-financiero-form">
+<h1 class="mb-4">{% translate "Recurrent Record" %}</h1>
+<form method="post" id="cadence-form">
     {% csrf_token %}
-    <!-- Utiliza el componente btn-group para el botón type toggle -->
     <div class="mb-3">
         <div class="btn-group" data-toggle="buttons">
             <label class="btn btn-primary btn-income">
@@ -26,26 +25,29 @@
         </div>
     </div>
 
-    <!-- Resto de los campos -->
     <p>
         <label for="{{ form.method.id_for_label }}">{% translate "Method:" %}</label>
         {{ form.method }}
     </p>
 
-    <p name="paid" class="form-switch ps-0" {% if form.type.value == 'income'%} style="display:block" {%else%} style="display:none" {% endif %} >
-        <label for="{{ form.income_paid.id_for_label }}" class="form-check-label">
-            {% translate "Paid?" %}
-        </label>
-        {{ form.income_paid }}
-    </p>
-    
     <p>
         <label for="{{ form.amount.id_for_label }}">{% translate "Amount:" %}</label>
         {{ form.amount }}
     </p>
+
     <p>
-        <label for="{{ form.date.id_for_label }}">{% translate "Date:" %}</label>
-        {{ form.date }}
+        <label for="{{ form.cadence_type.id_for_label }}">{% translate "Cadence:" %}</label>
+        {{ form.cadence_type }}
+    </p>
+
+    <p>
+        <label for="{{ form.date_from.id_for_label }}">{% translate "Date From:" %}</label>
+        {{ form.date_from}}
+    </p>
+
+    <p>
+        <label for="{{ form.date_to.id_for_label }}">{% translate "Date To:" %}</label>
+        {{ form.date_to}} {% translate  "*Leave empty for undefined" %}
     </p>
     <p>
         <label for="{{ form.label_existente.id_for_label }}">{% translate "Select a label:" %}</label>
@@ -56,11 +58,11 @@
         {{ form.label_personalizada }}
     </p>
 
-    <!-- Campo "Notas" al final -->
     <div class="mb-3">
         <label for="id_comment" class="form-label">{% translate "Comment" %}</label>
         <input type="text" class="rounded-pill" id="id_comment" name="comment"value="{{ form.comment.value }}">
     </div>
+
     <button type="submit" class="btn btn-primary">{% translate "Save" %}</button>
 </form>
 

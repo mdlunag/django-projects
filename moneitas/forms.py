@@ -1,5 +1,5 @@
 from django import forms
-from .models import FinancialRecord, Label, METHOD_CHOICES
+from .models import FinancialRecord, Label, RecurrentRecord, METHOD_CHOICES, CADENCE_CHOICES
 from datetime import date
 from django_select2.forms import Select2MultipleWidget
 from django.contrib.auth.forms import UserCreationForm
@@ -91,6 +91,57 @@ class UserCreationForm(UserCreationForm):
         self.fields['password1'].widget = forms.PasswordInput(attrs={'placeholder': _("Enter your Password")})
         self.fields['password2'].widget = forms.PasswordInput(attrs={'placeholder': _("Confirm your Password")})
 
+class FiltroRecurrentRecordForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  # Obtiene el usuario de los argumentos
+        super(FiltroRecurrentRecordForm, self).__init__(*args, **kwargs)
 
+    type = forms.ChoiceField(
+        choices=TYPE_CHOICES,
+        required=False,
+        label=_("Record Type"),
+    )
 
+    cadence_type = forms.ChoiceField(
+        choices=CADENCE_CHOICES,
+        required=False,
+        label=_('Cadence')
+    )
 
+class RecurrentRecordForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  # Obtiene el usuario de los argumentos
+        super(RecurrentRecordForm, self).__init__(*args, **kwargs)
+        if user:
+            self.fields['label_existente'].queryset = Label.objects.filter(user=user)
+
+    label_existente = forms.ModelChoiceField(
+        queryset=Label.objects.all(),
+        required=False,
+        empty_label=_("Choose existing label (optional)")
+    )
+    label_personalizada = forms.CharField(
+        max_length=255,
+        required=False,
+        label="O crea una nueva etiqueta (opcional)"
+    )
+
+    date_from = forms.DateField(
+        widget=forms.DateInput(
+            format="%Y-%m-%d", 
+            attrs={"type": "date"}),
+            input_formats=["%Y-%m-%d"])
+
+    date_to = forms.DateField(
+        required=False,
+        widget=forms.DateInput(
+            format="%Y-%m-%d", 
+            attrs={"type": "date"}),
+            input_formats=["%Y-%m-%d"])
+
+    class Meta:
+        model = RecurrentRecord
+        fields = ['comment', 'type', 'amount', 'date_from', 'date_to', 'label_existente', 'label_personalizada', 'method', 'cadence_type']
+        widgets = {
+            'amount': forms.TextInput(attrs={'class': 'rounded-pill'}),
+        }
