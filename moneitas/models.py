@@ -64,7 +64,7 @@ class RecurrentRecord(models.Model):
     date_to = models.DateField(null=True, blank=True)
     amount = models.DecimalField(decimal_places=2,  max_digits=10)
     label = models.ForeignKey(Label, on_delete=models.SET_NULL, blank=True, null=True)
-    comment = models.TextField(blank=True, null=True)
+    comment = models.TextField(blank=True, null=True, max_length=1000)
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Relaciona el registro con el usuario
     method = models.CharField(max_length=12, choices=METHOD_CHOICES, default='credit_card')
 
