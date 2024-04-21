@@ -323,21 +323,23 @@ def overview_dashboard(request):
     else:
         financial_records = FinancialRecord.objects.all()
 
+    type_labels = request.GET.get('type')
+
     # Procesar el formulario de filtro
-    filter_form = FiltroDashboardForm(request.GET, user=request.user)
+    filter_form = FiltroDashboardForm(request.GET, user=request.user, type_labels=type_labels)
 
     if filter_form.is_valid():
         selected_labels = filter_form.cleaned_data.get('labels')
         type_seleccionado = filter_form.cleaned_data.get('type')
         method_seleccionado = filter_form.cleaned_data.get('method')
 
-        if method_seleccionado and method_seleccionado != '':
+        if method_seleccionado:
             financial_records = financial_records.filter(method=method_seleccionado)
 
         if selected_labels:
             financial_records = financial_records.filter(label__in=selected_labels)
 
-        if type_seleccionado and type_seleccionado != '':
+        if type_seleccionado:
             financial_records = financial_records.filter(type=type_seleccionado)
 
     if request.user.username != 'admin':

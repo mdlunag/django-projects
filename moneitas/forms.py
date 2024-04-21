@@ -46,12 +46,15 @@ class FinancialRecordForm(forms.ModelForm):
 class FiltroDashboardForm(forms.Form):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)  # Obtiene el usuario de los argumentos
+        type_selected = kwargs.pop('type_labels')
         super(FiltroDashboardForm, self).__init__(*args, **kwargs)
         if user:
-            self.fields['labels'].queryset = Label.objects.filter(user=user)
+            self.fields['labels'].queryset = Label.objects.filter(user=user).order_by('name')
+        if type_selected:
+            self.fields['labels'].queryset = Label.objects.filter(user=user, type=type_selected).order_by('name')
 
     labels = forms.ModelMultipleChoiceField(
-        queryset=Label.objects.all(),
+        queryset=Label.objects.all().order_by('name'),
         required=False,
         widget=Select2MultipleWidget()
     )
