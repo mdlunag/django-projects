@@ -181,6 +181,8 @@ def register(request):
     return render(request, 'moneitas/register.html', {'form': form})
 
 def user_login(request):
+    parameters_dict = {}
+    username = None
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -188,7 +190,10 @@ def user_login(request):
         if user is not None:
             login(request, user)
             return redirect('overview_dashboard')
-    return render(request, 'moneitas/login.html')
+    if username:
+        parameters_dict['username'] = username
+    print (parameters_dict)
+    return render(request, 'moneitas/login.html', parameters_dict)
 
 def user_logout(request):
     logout(request)
