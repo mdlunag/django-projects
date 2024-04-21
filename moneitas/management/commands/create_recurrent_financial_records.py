@@ -37,7 +37,7 @@ class Command(BaseCommand):
 
             elif recurrent_record.cadence_type == 'weekly':
                 if not next_create_date:
-                    days_difference = cadence_day - today.weekday()+1
+                    days_difference = cadence_day - (today.weekday()+1)
                     next_create_date = today + relativedelta(days=days_difference)
 
                 if next_create_date < today or next_create_date == today:
