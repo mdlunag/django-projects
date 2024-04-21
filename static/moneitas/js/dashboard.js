@@ -63,39 +63,4 @@ async function getFinancialRecord(record_id, csrfToken) {
     }
 }
 
-$(document).ready(function() {
-    // Almacena las dimensiones iniciales del logotipo
-    var initialLogoWidth = $(".logo").width();
-    var initialLogoHeight = $(".logo").height();
-
-    $(window).scroll(function() {
-        var scrollPosition = $(this).scrollTop();
-        var navbarHeight = 100 - scrollPosition*0.8;
-        navbarHeight = navbarHeight < 50 ? 50 : navbarHeight; // Limitar la altura mínima
-
-        // Reduce gradualmente la altura de la barra de navegación
-        $("#navbar").stop().animate({
-            height: navbarHeight + "px"
-        }, 10); // Duración de la animación en milisegundos (más largo para una transición más gradual)
-
-        // Calcula las nuevas dimensiones del logotipo
-        var newLogoWidth = initialLogoWidth * (navbarHeight / 100);
-        var newLogoHeight = initialLogoHeight * (navbarHeight / 100);
-
-        // Ajusta el tamaño del logotipo manteniendo sus proporciones originales
-        $(".logo").stop().animate({
-            width: newLogoWidth + "px",
-            height: newLogoHeight + "px"
-        }, 10); // Duración de la animación en milisegundos (más largo para una transición más gradual)
-
-        // Calcula las nuevas dimensiones del logotipo
-        var newNavbarTogglerSize = parseInt(initialNavbarTogglerSize) * (navbarHeight / 100);
-        $(".navbar-toggler .navbar-toggler-icon").stop().animate({
-            fontSize: newNavbarTogglerSize + "px"
-        }, 10);
-
-        // Ajusta el margen superior del contenido principal
-        $(".main-content").css("margin-top", $("#navbar").height() + "px");
-    });
-});
 

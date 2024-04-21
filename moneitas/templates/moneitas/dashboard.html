@@ -9,7 +9,6 @@
 {% endblock %}
 
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{% static 'moneitas/css/styles_phone_dashboard.css' %}">
 
 <div style="text-align: center" class="main">
     <h1>{% translate "Financial Dashboard" %}</h1>
@@ -153,27 +152,20 @@
             </tbody>
         </table>
         </br>
-        <div class="center-button btn-delete-pc" >
-            <button type="submit" class="btn btn-delete">
-              <span class="mdi mdi-delete mdi-24px"></span>
-              <span class="mdi mdi-delete-empty mdi-24px"></span>
-              <span>{% translate "Delete Selected" %}</span>
-            </button>
-        </div>
+        {% include 'moneitas/delete_pc_button.html' %}
+        
     </form>
 </div>
 </div>
 
 <a href="{% url 'create_record' %}" class="float btn-crear-phone">
     <i class="fa fa-plus my-float"></i>
-</a>
-
-<a type="submit" id="delete-btn" class="float btn-delete-phone" style="display:none">
-    <i class="fa fa-trash my-trash"></i>
-</a>
+  </a>
+  
+{% include 'moneitas/delete_button_phone.html' %}
 
 <script type="text/javascript" data-lang="{{ LANGUAGE_CODE }}" src="{% static 'moneitas/js/dashboard.js' %}"></script>
-<script type="text/javascript" data-lang="{{ LANGUAGE_CODE }}" src="{% static 'moneitas/js/list_common.js' %}"></script>
+<script type="text/javascript" data-lang="{{ LANGUAGE_CODE }}" data-formName="financial-records" src="{% static 'moneitas/js/list_common.js' %}"></script>
 
 {% endblock %}
 
