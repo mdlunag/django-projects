@@ -1,0 +1,23 @@
+
+/* CSS styles to enhance error message display */
+
+.error-container {
+    margin-top: 20px; /* Add space above error messages */
+  }
+  
+  .error-list {
+    list-style-type: none; /* Remove default bullet points */
+    padding: 0;
+  }
+  
+  .error-item {
+    color: red; /* Set text color to red for error messages */
+    margin-bottom: 10px; /* Add space between error messages */
+  }
+  
+  .error-icon {
+    display: inline-block;
+    font-size: 20px; /* Adjust icon size */
+    margin-right: 5px; /* Add space between icon and error message */
+  }
+  

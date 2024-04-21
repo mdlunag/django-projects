@@ -238,6 +238,10 @@ def create_financial_record(request, edit=None):
 
             # Redirige al usuario a la página del panel de control con el filtro aplicado
             return redirect(url_redireccion)
+
+        else:
+            return render(request, 'moneitas/create_recurrent_record.html', {'form': form})
+
     if edit:
         record_edit = FinancialRecord.objects.get(id=edit)
         print(record_edit.type)
@@ -406,11 +410,10 @@ def list_recurrent_records(request):
 def create_recurrent_record(request, edit=None):
     if request.method == 'POST':
         record = RecurrentRecord.objects.filter(id=edit) if edit else None
-        initial = record.values('comment', 'type', 'amount', 'date_from', 'date_to', 'method', 'cadence_type')[0] if record else []
+        initial = record.values('comment', 'type', 'amount', 'date_from', 'date_to', 'method', 'cadence_type', 'cadence_position')[0] if record else []
         form = RecurrentRecordForm(request.POST, user=request.user, initial=initial)
         print(form.errors)
         if form.is_valid():
-            print('a')
             record = record[0] if record else form.save(commit=False)
             etiqueta_existente = form.cleaned_data['label_existente']
             etiqueta_personalizada = form.cleaned_data['label_personalizada']
@@ -434,9 +437,11 @@ def create_recurrent_record(request, edit=None):
             record.save()
 
             return redirect('list_recurrent_records')
+        else:
+            return render(request, 'moneitas/create_recurrent_record.html', {'form': form})
+
     if edit:
         record_edit = RecurrentRecord.objects.get(id=edit)
-        print(record_edit.type)
         form = RecurrentRecordForm(initial={
             'type': 'income' if record_edit.type == 'income' else 'expense',
             'method': record_edit.method,
@@ -445,6 +450,7 @@ def create_recurrent_record(request, edit=None):
             'date_to': record_edit.date_to,
             'label_existente': record_edit.label or '',
             'cadence_type': record_edit.cadence_type,
+            'cadence_position': record_edit.cadence_position,
             'comment':  record_edit.comment,
             })
     else:
