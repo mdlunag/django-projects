@@ -194,3 +194,4 @@ $(document).ready(function() {
         $(".main-content").css("margin-top", $("#navbar").height() + "px");
     });
 });
+
