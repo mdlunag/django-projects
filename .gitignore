@@ -5,6 +5,5 @@ __pycache__
 **/migrations/__pycache__
 **.pyc
 migrations/
-moneitas/management
 venv/
 .vscode/
