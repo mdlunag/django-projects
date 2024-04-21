@@ -68,7 +68,7 @@ class RecurrentRecord(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Relaciona el registro con el usuario
     method = models.CharField(max_length=12, choices=METHOD_CHOICES, default='credit_card')
 
-    cadence_type = models.CharField(choices=CADENCE_CHOICES, default='monthly')
+    cadence_type = models.CharField(choices=CADENCE_CHOICES, default='monthly', max_length=20)
     cadence_position = models.IntegerField(default=1)
 
     last_created_date = models.DateField(null=True)
