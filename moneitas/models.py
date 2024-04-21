@@ -74,7 +74,3 @@ class RecurrentRecord(models.Model):
     last_created_date = models.DateField(null=True)
     next_create_date = models.DateField(null=True)
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['comment', 'user', 'type'], name='unique_recurrent_record_per_user')
-        ]
