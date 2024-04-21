@@ -7,8 +7,14 @@
 {% endblock %}
 
 {% block content %}
-<div style="text-align: center;">
+<div style="text-align: center" class="main">
     <h1>{% translate "Recurrent Records" %}</h1>
+    <p class="btn-crear-pc">
+        </br>
+        <a href="{% url 'create_recurrent_record' %}" class="btn-crear mb-3">
+            {% translate "Create Recurrent Record" %}</a>
+        </br>
+    </p>
 
     <form method="get" id="filtro-form" class="d-flex justify-content-center mt-3">
         <div class="form-group text-center mx-3">
@@ -29,10 +35,6 @@
         });
 
     </script>
-
-    </br>
-     <a href="{% url 'create_recurrent_record' %}" class="btn-crear mb-3">{% translate "Create Recurrent Record" %}</a>
-    </br>
 
     <form method="post" id="recurrent-records">
         {% csrf_token %}
@@ -62,25 +64,25 @@
                         <td class="clickable">{{ record.comment }}</td>
                         <td style="width: 2%;">
                             
-                        <div class="d-flex align-items-center">
+                            <div class="d-flex align-items-center">
                                 {% comment %} Payment Method {% endcomment %}
-                            <i class="payment-method"> 
-                                <i title="Payment method" 
-                                    {% if record.method == 'credit_card' %}
-                                    class="fa-regular fa-credit-card" 
-                                    onclick="EditRegister('method', 'cash', 'recurrent_record', {{record.id}})"
-                                    {% else %}
-                                    class="fa-solid fa-money-bill-1"
-                                    onclick="EditRegister('method', 'credit_card', 'recurrent_record', {{record.id}})"
-                                    {% endif%}>
+                                <i class="payment-method"> 
+                                    <i title="Payment method" 
+                                        {% if record.method == 'credit_card' %}
+                                        class="fa-regular fa-credit-card" 
+                                        onclick="EditRegister('method', 'cash', 'recurrent_record', {{record.id}})"
+                                        {% else %}
+                                        class="fa-solid fa-money-bill-1"
+                                        onclick="EditRegister('method', 'credit_card', 'recurrent_record', {{record.id}})"
+                                        {% endif%}>
+                                    </i>
                                 </i>
-                            </i>
-                                                                
-                            {% comment %} Edit record {% endcomment %}
-                            <a class="fas fa-pencil ms-3" href="{% url 'create_recurrent_record' edit=record.id %}"></a>
-                            
-                            {% comment %} Invisible input to manage record deletion {% endcomment %}
-                            <input type="checkbox" name="delete_{{ record.id }}" style="display:none" id="_delete" class="delete-checkbox">
+                                                                    
+                                {% comment %} Edit record {% endcomment %}
+                                <a class="fas fa-pencil ms-3" href="{% url 'create_recurrent_record' edit=record.id %}"></a>
+                                
+                                {% comment %} Invisible input to manage record deletion {% endcomment %}
+                                <input type="checkbox" name="delete_{{ record.id }}" style="display:none" id="_delete" class="delete-checkbox">
 
                             </div>
                         </td>
@@ -90,16 +92,19 @@
             </tbody>
         </table>
         </br>
-        <div class="center-button btn-delete-pc" >
-            <button type="submit" class="btn btn-delete">
-              <span class="mdi mdi-delete mdi-24px"></span>
-              <span class="mdi mdi-delete-empty mdi-24px"></span>
-              <span>{% translate "Delete Selected" %}</span>
-            </button>
-        </div>
+
+        {% include 'moneitas/delete_pc_button.html' %}
+
     </form>
 </div>
+</div>
 
-<script type="text/javascript" data-lang="{{ LANGUAGE_CODE }}" src="{% static 'moneitas/js/list_common.js' %}"></script>
+<a href="{% url 'create_recurrent_record' %}" class="float btn-crear-phone">
+    <i class="fa fa-plus my-float"></i>
+  </a>
+  
+{% include 'moneitas/delete_button_phone.html' %}
+
+<script type="text/javascript" data-lang="{{ LANGUAGE_CODE }}" data-formName="recurrent-records" src="{% static 'moneitas/js/list_common.js' %}"></script>
 
 {% endblock %}
