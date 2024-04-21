@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Task, FinancialRecord
+from .models import Task, FinancialRecord, RecurrentRecord
 
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,4 +10,9 @@ class FinancialRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = FinancialRecord
         fields = '__all__'
+
     
+class RecurrentRecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecurrentRecord
+        fields = '__all__'

@@ -88,7 +88,7 @@ h1{
 /* Estilos de las lineas de registros */
 
 
-.registros-table {
+.registros-table, .recurrent-records-table {
     width: 100%; /* Toma el 100% del ancho del contenedor de registros */
     border-collapse: collapse;
     border-radius: 10px;
@@ -111,7 +111,9 @@ h1{
 
 /* Ajustar el margen y el relleno de las celdas de la tabla */
 .registros-table td,
-.registros-table th {
+.registros-table th,
+.recurrent-records-table td,
+.recurrent-records-table th {
     padding: 8px; /* Ajusta el relleno según tus preferencias */
     margin: 0; /* Elimina los márgenes predeterminados */
     border-bottom: 0.2em solid #ffffff;

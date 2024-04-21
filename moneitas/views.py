@@ -1,5 +1,5 @@
-from .models import FinancialRecord, Task, Label
-from .forms import FinancialRecordForm, FiltroDashboardForm, FiltroLabelsListForm, UserCreationForm
+from .models import FinancialRecord, Task, Label, RecurrentRecord
+from .forms import FinancialRecordForm, FiltroDashboardForm, FiltroLabelsListForm, UserCreationForm, FiltroRecurrentRecordForm, RecurrentRecordForm
 
 from calendar import month_name, different_locale
 import locale
@@ -26,7 +26,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets
-from .serializers import TaskSerializer, FinancialRecordSerializer
+from .serializers import TaskSerializer, FinancialRecordSerializer, RecurrentRecordSerializer
 
 
 #To Do list
@@ -100,7 +100,6 @@ def get_labels(request):
     labels = Label.objects.filter(type=type)
     if request.user.username != 'admin':
         labels = labels.filter(user=request.user)
-    print(labels)
     return JsonResponse({'labels': list(labels.values('id', 'name'))})
 
 @login_required
@@ -377,4 +376,95 @@ def overview_dashboard(request):
         'dashboard_disabled': True,
     })
 
+# Recurrent expenses
+@login_required
+def list_recurrent_records(request):
+    recurrent_records = RecurrentRecord.objects.filter(user=request.user)
+    if request.method == 'POST':
+        # Procesar el formulario de eliminación
+        for record in recurrent_records:
+            if request.POST.get(f"delete_{record.id}") == 'on':
+                record.delete()
+        return redirect('list_recurrent_records')
 
+    # Procesar el formulario de filtro
+    filter_form = FiltroRecurrentRecordForm(request.GET, user=request.user)
+
+    if filter_form.is_valid():
+        selected_type = filter_form.cleaned_data.get('type')
+
+        if selected_type and selected_type != '':
+            recurrent_records = recurrent_records.filter(type=selected_type)
+
+    return render(request, 'moneitas/recurrent_records.html', {
+        'recurrent_records': recurrent_records,
+        'recurrent_records_disabled': True,
+        'filter_form': filter_form,
+        },)
+
+@login_required
+def create_recurrent_record(request, edit=None):
+    if request.method == 'POST':
+        record = RecurrentRecord.objects.filter(id=edit) if edit else None
+        initial = record.values('comment', 'type', 'amount', 'date_from', 'date_to', 'method', 'cadence_type')[0] if record else []
+        form = RecurrentRecordForm(request.POST, user=request.user, initial=initial)
+        print(form.errors)
+        if form.is_valid():
+            print('a')
+            record = record[0] if record else form.save(commit=False)
+            etiqueta_existente = form.cleaned_data['label_existente']
+            etiqueta_personalizada = form.cleaned_data['label_personalizada']
+
+            # Verifica si se seleccionó una etiqueta existente o se proporcionó una etiqueta personalizada.
+            if etiqueta_existente or etiqueta_personalizada:
+                etiqueta = etiqueta_existente or Label.objects.create(
+                    name=etiqueta_personalizada, 
+                    user=request.user, 
+                    type=record.type or request.POST.get('type'))
+            else:
+                # Maneja el caso en el que no se proporciona ninguna etiqueta.
+                etiqueta = None
+
+	        # Crea el registro financiero con la etiqueta asociada.
+            record.label = etiqueta
+            record.user = request.user
+            if edit and form.changed_data:
+                for field in form.changed_data:
+                    setattr(record, field, form.cleaned_data[field])
+            record.save()
+
+            return redirect('list_recurrent_records')
+    if edit:
+        record_edit = RecurrentRecord.objects.get(id=edit)
+        print(record_edit.type)
+        form = RecurrentRecordForm(initial={
+            'type': 'income' if record_edit.type == 'income' else 'expense',
+            'method': record_edit.method,
+            'amount': record_edit.amount,
+            'date_from': record_edit.date_from,
+            'date_to': record_edit.date_to,
+            'label_existente': record_edit.label or '',
+            'cadence_type': record_edit.cadence_type,
+            'comment':  record_edit.comment,
+            })
+    else:
+        form = RecurrentRecordForm(initial={'date_from': date.today(), 'comment':''}, user=request.user)  # Prellenar la fecha con la fecha actual
+
+    return render(request, 'moneitas/create_recurrent_record.html', {'form': form})
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])  # Aplica la verificación de autenticación solo a esta función
+def edit_recurrent_record(request, record_id):
+    try:
+        record = RecurrentRecord.objects.get(id=record_id)
+    except RecurrentRecord.DoesNotExist:
+        return Response({'error': "Recurrent record doesn't exist"}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PATCH':
+        serializer = RecurrentRecordSerializer(record, data=request.data,partial=True)
+        print(request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -22,8 +22,13 @@
               <li><a class="dropdown-item {% if labels_disabled %}disabled{% endif %}" id="labels" href="{% url 'list_labels'%}">
                 {% translate "Labels" %}
               </a></li>
+              <li><a class="dropdown-item {% if recurrent_records_disabled %}disabled{% endif %}" id="recurrent" href="{% url 'list_recurrent_records'%}">
+                {% translate "Recurrent Expenses" %}
+              </a></li>
               <li><a class="dropdown-item {% if todo_disabled %}disabled{% endif %}" href="{% url 'todo'%}">TODO's</a></li>
-              <li><a class="dropdown-item" href="#">{% translate "Personal Information" %}</a></li>
+              <li><a class="dropdown-item" {% if personal_info_disabled %}disabled{% endif %} href="#">
+                {% translate "Personal Information" %}
+              </a></li>
           </ul>
         </li>
         <form action="{% url 'set_language' %}" method="post">
