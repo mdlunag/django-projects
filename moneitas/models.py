@@ -72,7 +72,7 @@ class RecurrentRecord(models.Model):
     cadence_position = models.IntegerField(default=1)
 
     last_created_date = models.DateField(null=True)
-
+    next_create_date = models.DateField(null=True)
 
     class Meta:
         constraints = [
