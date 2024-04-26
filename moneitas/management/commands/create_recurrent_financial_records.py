@@ -53,7 +53,7 @@ class Command(BaseCommand):
                     amount=recurrent_record.amount,
                     date=today,
                     label=recurrent_record.label,
-                    comment=recurrent_record.comment,
+                    comment=f"RECURRENT: {recurrent_record.comment}",
                     user=recurrent_record.user,
                     method=recurrent_record.method,
                     income_paid=False

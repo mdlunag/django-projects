@@ -213,13 +213,13 @@ def create_financial_record(request, edit=None):
             # Verifica si se seleccionó una etiqueta existente o se proporcionó una etiqueta personalizada.
             if etiqueta_existente or etiqueta_personalizada:
                 etiqueta = etiqueta_existente or Label.objects.create(
-                    name=etiqueta_personalizada, 
-                    user=request.user, 
+                    name=etiqueta_personalizada,
+                    user=request.user,
                     type=record.type or request.POST.get('type'))
             else:
                 # Maneja el caso en el que no se proporciona ninguna etiqueta.
                 etiqueta = None
-            
+
 	        # Crea el registro financiero con la etiqueta asociada.
             record.label = etiqueta  # Asocia la etiqueta con el record financiero
             #registro.user= User.objects.get(username='aitor.rife@gmail.com')
@@ -279,7 +279,7 @@ def edit_financial_record(request, record_id):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated]) 
+@permission_classes([IsAuthenticated])
 def get_financial_record(request, record_id):
     try:
         record = FinancialRecord.objects.get(id=record_id)
@@ -421,8 +421,8 @@ def create_recurrent_record(request, edit=None):
             # Verifica si se seleccionó una etiqueta existente o se proporcionó una etiqueta personalizada.
             if etiqueta_existente or etiqueta_personalizada:
                 etiqueta = etiqueta_existente or Label.objects.create(
-                    name=etiqueta_personalizada, 
-                    user=request.user, 
+                    name=etiqueta_personalizada,
+                    user=request.user,
                     type=record.type or request.POST.get('type'))
             else:
                 # Maneja el caso en el que no se proporciona ninguna etiqueta.
@@ -433,6 +433,8 @@ def create_recurrent_record(request, edit=None):
             record.user = request.user
             if edit and form.changed_data:
                 for field in form.changed_data:
+                    if field in ("date_from", "cadence_position", "cadence_type"):
+                        setattr(record, "next_create_date", None)
                     setattr(record, field, form.cleaned_data[field])
             record.save()
 
