@@ -30,8 +30,6 @@
 
     select {
         width: 100%; /* Hacer que el select ocupe el ancho completo */
-        font-size:11px !important;
-        margin: 0.05;
     }
 
     button[type="submit"] {
@@ -89,7 +87,7 @@
         box-shadow: 2px 2px 3px #999;
     }
 
-    .btn-delete-phone{        
+    .btn-delete-phone{
         background-color:red;
         color:white;
         box-shadow: 2px 2px 3px #a15d5d;
@@ -150,5 +148,5 @@
     height: auto; /* Permite que el logotipo mantenga sus proporciones originales */
 }
 
-   
+
 }
