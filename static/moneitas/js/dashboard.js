@@ -6,11 +6,20 @@ const filtroMetodo = document.querySelector('select[name="method"]');
 
 // Obtén una referencia al formulario y al select
 const monthSelect = document.getElementById('month');
+const yearSelect = document.getElementById('year');
+
 
 // Agrega un evento de cambio al select
 monthSelect.addEventListener('change', function () {
     // Envía automáticamente el formulario cuando cambie la selección del mes
     filtroForm.submit();
+});
+
+yearSelect.addEventListener('change', function () {
+    if (yearSelect.value === 'Todos') {
+        monthSelect.value = 'Todos'; // Cambia automáticamente el mes a "Todos"
+    }
+    filtroForm.submit(); // Envía automáticamente el formulario
 });
 
 filtroCheckboxes.forEach(checkbox => {

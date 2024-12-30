@@ -299,29 +299,45 @@ def overview_dashboard(request):
     current_date = date.today()
 
     # Obtener el mes seleccionado del parámetro GET, si está presente
-    selected_date= request.GET.get('month', f'{current_date.month}-{current_date.year}')
+    selected_month= request.GET.get('month', f'{current_date.month}')
+    selected_year = request.GET.get('year', f'{current_date.year}')
 
     # Calcular el primer y último día del mes seleccionado (si no es "Todos")
-    if selected_date != 'Todos':
-        selected_month, selected_year = selected_date.split("-")
+    if selected_month != 'Todos':
         first_day_of_month = current_date.replace(year=int(selected_year),month=int(selected_month), day=1)
         last_day_of_month = first_day_of_month.replace(
             month=first_day_of_month.month % 12 + 1,
             year=first_day_of_month.year + first_day_of_month.month // 12,
             day=1
         ) - timedelta(days=1)
+        print(first_day_of_month, last_day_of_month)
+    elif selected_month == 'Todos' and selected_year != 'Todos':
+        first_day_of_month = current_date.replace(year=int(selected_year),month=1, day=1)
+        last_day_of_month = first_day_of_month.replace(
+            month=12,
+            year=int(selected_year),
+            day=31
+        )
     else:
         first_day_of_month = None
         last_day_of_month = None
 
-    # Obtener una lista de meses con datos
-    months_with_data = FinancialRecord.objects.filter(user=request.user
-    ).dates('date', 'month','DESC')
-
-    # Convertir los objetos de fecha a names de mes legibles
+    if selected_year != 'Todos':
+        months_with_data = FinancialRecord.objects.filter(user=request.user, date__year= selected_year
+    ).dates('date', 'month','ASC')
+    else:
+        months_with_data = FinancialRecord.objects.filter(user=request.user
+        ).dates('date', 'month','ASC')
     lang = request.LANGUAGE_CODE
-    month_choices = [(f'{month.month}-{month.year}', get_month_name(month.month, lang).capitalize() + ' ' + str(month.year)) for month in months_with_data]
+    month_choices = [(f'{month.month}', get_month_name(month.month, lang).capitalize()) for month in months_with_data]
+    if selected_year != 'Todos' and str(current_date.year) == selected_year and not any(record.month == current_date.month for record in months_with_data):
+        month_choices += [(f'{current_date.month}', get_month_name(current_date.month, lang).capitalize())]
     month_choices += [('Todos', 'Todos')]
+
+    years_with_data = FinancialRecord.objects.filter(user=request.user
+    ).dates('date', 'year','DESC')
+    year_choices = [(f'{year.year}', str(year.year)) for year in years_with_data]
+    year_choices += [('Todos', 'Todos')]
 
     # Filtrar registros financieros según el rango de fechas (si no es "Todos")
     if first_day_of_month and last_day_of_month:
@@ -373,8 +389,10 @@ def overview_dashboard(request):
         'incomes': incomes,
         'expenses': expenses,
         'balance': balance,
-        'selected_month': selected_date,
+        'selected_month': selected_month,
+        'selected_year': selected_year,
         'month_choices': month_choices,
+        'year_choices': year_choices,
         'financial_records': financial_records.order_by('-date', '-type', 'amount'),
         'filter_form': filter_form,
         'dashboard_disabled': True,
@@ -400,7 +418,14 @@ def list_recurrent_records(request):
         if selected_type and selected_type != '':
             recurrent_records = recurrent_records.filter(type=selected_type)
 
+    incomes = recurrent_records.filter(type='income').aggregate(Sum('amount'))['amount__sum'] or 0
+    expenses = recurrent_records.filter(type='expense').aggregate(Sum('amount'))['amount__sum'] or 0
+    balance = incomes - expenses
+
     return render(request, 'moneitas/recurrent_records.html', {
+        'incomes': incomes,
+        'expenses': expenses,
+        'balance': balance,
         'recurrent_records': recurrent_records,
         'recurrent_records_disabled': True,
         'filter_form': filter_form,

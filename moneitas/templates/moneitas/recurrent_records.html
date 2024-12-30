@@ -16,6 +16,47 @@
         </br>
     </p>
 
+    <div class="dashboard-row">
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    
+                        <h4>{% translate "Incomes" %}</h4>
+                    {{ incomes }}
+                    
+                </div>
+                <div class="flip-card-back">
+                        <h4>{% translate "Incomes" %}</h4>
+                        Total
+                </div>
+            </div>
+        </div>
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                        <h4>{% translate "Expenses" %}</h4>
+                        {{ expenses }}
+                </div>
+                <div class="flip-card-back">
+                        <h4>{% translate "Expenses" %}</h4>
+                        dul
+                </div>
+            </div>
+        </div>
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                        <h4>{% translate "Result" %}</h4>
+                        {{ balance }}
+                </div>
+                <div class="flip-card-back">
+                        <h4>{% translate "Result" %}</h4>
+                        bo
+                </div>
+            </div>
+        </div>
+    </div>
+
     <form method="get" id="filtro-form" class="d-flex justify-content-center mt-3">
         <div class="form-group text-center mx-3">
                 <label for="{{ filter_form.type.id_for_label }}">{% translate "Type" %}:</label>
