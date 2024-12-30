@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-27 01:46+0100\n"
+"POT-Creation-Date: 2024-12-30 14:47+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,13 +17,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: forms.py:8 models.py:18 templates/moneitas/create_financial_record.html:19
+#: forms.py:8 models.py:23 templates/moneitas/create_financial_record.html:20
 #: templates/moneitas/create_label.html:19
+#: templates/moneitas/create_recurrent_record.html:19
 msgid "Income"
 msgstr "Ingreso"
 
-#: forms.py:8 models.py:19 templates/moneitas/create_financial_record.html:23
+#: forms.py:8 models.py:24 templates/moneitas/create_financial_record.html:24
 #: templates/moneitas/create_label.html:23
+#: templates/moneitas/create_recurrent_record.html:23
 msgid "Expense"
 msgstr "Gasto"
 
@@ -31,25 +33,29 @@ msgstr "Gasto"
 msgid "All"
 msgstr "Todos"
 
-#: forms.py:22
+#: forms.py:22 forms.py:121
 msgid "Choose existing label (optional)"
 msgstr "Elige una etiqueta existente (opcional)"
 
-#: forms.py:78
+#: forms.py:84 forms.py:102
 msgid "Record Type"
 msgstr "Tipo de registro"
 
-#: forms.py:84
+#: forms.py:90
 msgid "Username or Email Address"
 msgstr "Nombre de usuario o Email"
 
-#: forms.py:85
+#: forms.py:91
 msgid "Enter your Password"
 msgstr "Cree una contraseña"
 
-#: forms.py:86
+#: forms.py:92
 msgid "Confirm your Password"
 msgstr "Confirme su contraseña"
+
+#: forms.py:108 templates/moneitas/recurrent_records.html:66
+msgid "Cadence"
+msgstr "Frecuencia"
 
 #: models.py:13
 msgid "Cash"
@@ -59,114 +65,157 @@ msgstr "Efectivo"
 msgid "Card"
 msgstr "Tarjeta"
 
-#: templates/moneitas/base_create_record.html:31
+#: models.py:18
+msgid "Monthly"
+msgstr "Mensual"
+
+#: models.py:19
+msgid "Weekly"
+msgstr "Semanal"
+
+#: templates/moneitas/base_create_record.html:32
 msgid "Back"
 msgstr "Atrás"
 
-#: templates/moneitas/create_financial_record.html:4
-#: templates/moneitas/dashboard.html:17
+#: templates/moneitas/create_financial_record.html:5
+#: templates/moneitas/dashboard.html:18
 msgid "Create Financial Record"
 msgstr "Crear Registro Financiero"
 
-#: templates/moneitas/create_financial_record.html:11
+#: templates/moneitas/create_financial_record.html:12
 msgid "Financial Record"
 msgstr "Registro Financiero"
 
-#: templates/moneitas/create_financial_record.html:30
-#: templates/moneitas/dashboard.html:44
+#: templates/moneitas/create_financial_record.html:31
+#: templates/moneitas/create_recurrent_record.html:29
+#: templates/moneitas/dashboard.html:59
 msgid "Method:"
 msgstr "Método"
 
-#: templates/moneitas/create_financial_record.html:36
+#: templates/moneitas/create_financial_record.html:37
 msgid "Paid?"
 msgstr "Pagado?"
 
-#: templates/moneitas/create_financial_record.html:42
+#: templates/moneitas/create_financial_record.html:43
+#: templates/moneitas/create_recurrent_record.html:34
 msgid "Amount:"
 msgstr "Monto:"
 
-#: templates/moneitas/create_financial_record.html:46
+#: templates/moneitas/create_financial_record.html:47
 #, fuzzy
 #| msgid "Date"
 msgid "Date:"
 msgstr "Fecha"
 
-#: templates/moneitas/create_financial_record.html:50
+#: templates/moneitas/create_financial_record.html:51
+#: templates/moneitas/create_recurrent_record.html:58
 msgid "Select a label:"
 msgstr "Selecciona una etiqueta:"
 
-#: templates/moneitas/create_financial_record.html:54
+#: templates/moneitas/create_financial_record.html:55
+#: templates/moneitas/create_recurrent_record.html:62
 msgid "or create a new label (optional):"
 msgstr "o crea una nueva etiqueta (opcional):"
 
-#: templates/moneitas/create_financial_record.html:60
-#: templates/moneitas/dashboard.html:87
+#: templates/moneitas/create_financial_record.html:61
+#: templates/moneitas/create_recurrent_record.html:67
+#: templates/moneitas/recurrent_records.html:90
 msgid "Comment"
 msgstr "Nota"
 
-#: templates/moneitas/create_financial_record.html:63
+#: templates/moneitas/create_financial_record.html:64
 #: templates/moneitas/create_label.html:34
+#: templates/moneitas/create_recurrent_record.html:87
 msgid "Save"
 msgstr "Guardar"
 
-#: templates/moneitas/create_label.html:4 templates/moneitas/labels.html:29
+#: templates/moneitas/create_label.html:4 templates/moneitas/labels.html:16
 msgid "Create Label"
 msgstr "Crear Etiqueta"
 
-#: templates/moneitas/create_label.html:11 templates/moneitas/dashboard.html:86
+#: templates/moneitas/create_label.html:11
+#: templates/moneitas/recurrent_records.html:89
 msgid "Label"
 msgstr "Etiquetas"
 
-#: templates/moneitas/create_label.html:30 templates/moneitas/labels.html:37
+#: templates/moneitas/create_label.html:30 templates/moneitas/labels.html:41
 msgid "Name"
 msgstr "Nombre"
+
+#: templates/moneitas/create_recurrent_record.html:5
+#: templates/moneitas/recurrent_records.html:15
+msgid "Create Recurrent Record"
+msgstr "Crear Registro Financiero"
+
+#: templates/moneitas/create_recurrent_record.html:12
+msgid "Recurrent Record"
+msgstr "Registro Recurrente"
+
+#: templates/moneitas/create_recurrent_record.html:39
+msgid "Cadence:"
+msgstr "Frecuencia"
+
+#: templates/moneitas/create_recurrent_record.html:44
+msgid "Cadence Day of Month/Week:"
+msgstr "Día del Mes/Semana"
+
+#: templates/moneitas/create_recurrent_record.html:49
+msgid "Date From:"
+msgstr "Fecha Desde"
+
+#: templates/moneitas/create_recurrent_record.html:54
+msgid "Date To:"
+msgstr "Fecha Hasta"
 
 #: templates/moneitas/dashboard.html:8 templates/moneitas/dashboard.html:14
 msgid "Financial Dashboard"
 msgstr "Dashboard de Finanzas"
 
-#: templates/moneitas/dashboard.html:23
+#: templates/moneitas/dashboard.html:25
 msgid "Month:"
 msgstr "Mes"
 
-#: templates/moneitas/dashboard.html:37
+#: templates/moneitas/dashboard.html:38
+msgid "Year:"
+msgstr "Año"
+
+#: templates/moneitas/dashboard.html:52
 msgid "Type:"
 msgstr "Tipo"
 
-#: templates/moneitas/dashboard.html:52
+#: templates/moneitas/dashboard.html:67
 msgid "Labels:"
 msgstr "Etiquetas"
 
-#: templates/moneitas/dashboard.html:66
+#: templates/moneitas/dashboard.html:82 templates/moneitas/dashboard.html:87
+#: templates/moneitas/recurrent_records.html:24
+#: templates/moneitas/recurrent_records.html:29
 msgid "Incomes"
 msgstr "Ingresos"
 
-#: templates/moneitas/dashboard.html:70
+#: templates/moneitas/dashboard.html:95 templates/moneitas/dashboard.html:99
+#: templates/moneitas/recurrent_records.html:37
+#: templates/moneitas/recurrent_records.html:41
 msgid "Expenses"
 msgstr "Gastos"
 
-#: templates/moneitas/dashboard.html:74
+#: templates/moneitas/dashboard.html:107 templates/moneitas/dashboard.html:111
+#: templates/moneitas/recurrent_records.html:49
+#: templates/moneitas/recurrent_records.html:53
 msgid "Result"
 msgstr "Saldo"
 
-#: templates/moneitas/dashboard.html:84
-msgid "Amount"
-msgstr "Monto"
-
-#: templates/moneitas/dashboard.html:85
-msgid "Date"
-msgstr "Fecha"
-
-#: templates/moneitas/dashboard.html:146 templates/moneitas/labels.html:65
+#: templates/moneitas/delete_pc_button.html:7
 msgid "Delete Selected"
 msgstr "Eliminar Seleccionados"
 
-#: templates/moneitas/labels.html:5 templates/moneitas/labels.html:10
+#: templates/moneitas/labels.html:6 templates/moneitas/labels.html:12
 #: templates/moneitas/navbar.html:23
 msgid "Labels"
 msgstr "Etiquetas"
 
-#: templates/moneitas/labels.html:14 templates/moneitas/labels.html:38
+#: templates/moneitas/labels.html:22
+#: templates/moneitas/recurrent_records.html:62
 msgid "Type"
 msgstr "Tipo"
 
@@ -179,9 +228,34 @@ msgid "Settings"
 msgstr "Configuración"
 
 #: templates/moneitas/navbar.html:26
+msgid "Recurrent Expenses"
+msgstr "Gastos Recurrentes"
+
+#: templates/moneitas/navbar.html:30
 msgid "Personal Information"
 msgstr "Información Personal"
 
-#: templates/moneitas/navbar.html:32
+#: templates/moneitas/navbar.html:37
 msgid "Language"
 msgstr "Idioma"
+
+#: templates/moneitas/recurrent_records.html:6
+#: templates/moneitas/recurrent_records.html:11
+msgid "Recurrent Records"
+msgstr "Gastos Recurrentes"
+
+#: templates/moneitas/recurrent_records.html:85
+msgid "Amount"
+msgstr "Monto"
+
+#: templates/moneitas/recurrent_records.html:86
+msgid "Cadence (day)"
+msgstr "Frecuencia (día)"
+
+#: templates/moneitas/recurrent_records.html:87
+msgid "Date From"
+msgstr "Fecha Desde"
+
+#: templates/moneitas/recurrent_records.html:88
+msgid "Date To"
+msgstr "Fecha Hasta"
