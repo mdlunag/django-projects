@@ -330,8 +330,11 @@ def overview_dashboard(request):
         ).dates('date', 'month','ASC')
     lang = request.LANGUAGE_CODE
     month_choices = [(f'{month.month}', get_month_name(month.month, lang).capitalize()) for month in months_with_data]
-    if selected_year != 'Todos' and str(current_date.year) == selected_year and not any(record.month == current_date.month for record in months_with_data):
-        month_choices += [(f'{current_date.month}', get_month_name(current_date.month, lang).capitalize())]
+    if selected_year != 'Todos':
+        if str(current_date.year) == selected_year and not any(record.month == current_date.month for record in months_with_data):
+            month_choices += [(f'{current_date.month}', get_month_name(current_date.month, lang).capitalize())]
+        elif selected_month != 'Todos' and not any(str(record.month) == selected_month for record in months_with_data):
+            month_choices += [(f'{selected_month}', get_month_name(int(selected_month), lang).capitalize())]
     month_choices += [('Todos', 'Todos')]
 
     years_with_data = FinancialRecord.objects.filter(user=request.user
