@@ -230,11 +230,11 @@ def create_financial_record(request, edit=None):
             record.save()
 
              # Después de crear el registro, obtén el mes del registro creado
-            month_record = f'{record.date.month}-{record.date.year}' # Asegúrate de reemplazar "nuevo_registro" con la variable real que contiene el registro recién creado
-
+            month_record = f'{record.date.month}'
+            year_record = f'{record.date.year}'
 
             # Construye la URL de redirección con eledit= parámetro "month" del mes del registro
-            url_redireccion = reverse('overview_dashboard') + f'?month={month_record}'
+            url_redireccion = reverse('overview_dashboard') + f'?month={month_record}' + f'&year={year_record}'
 
             # Redirige al usuario a la página del panel de control con el filtro aplicado
             return redirect(url_redireccion)
