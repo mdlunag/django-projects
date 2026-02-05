@@ -1,0 +1,183 @@
+<!-- chatbot.html -->
+{% load static %}
+<button id="chatbot-toggle-btn">
+    <!--img src="https://cdn1.iconfinder.com/data/icons/social-media-hexagon-1/1024/whatsapp-512.png" width="50" height="50" alt="chatbot"/-->
+    <img src="{% static 'moneitas/chatbot2.png' %}" type="image/png" width="50" height="50" alt="chatbot"/>
+
+</button>
+<div class="chatbot-popup" id="chatbot-popup">
+  <div class="chat-header">
+    <span>Agente de gastos</span>
+    <button id="close-btn">&times;</button>
+  </div>
+  <div class="chat-box" id="chat-box"></div>
+  <div class="chat-input" >
+    <input type="text" id="user-input" placeholder="Haz tu pregunta...">
+    <button id="send-btn"><img src="{% static 'moneitas/send-message.png' %}" type="image/png" alt="send" width="25" height="25"/></button>
+  </div>
+</div>
+
+<style>
+#chatbot-toggle-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.chatbot-popup {
+  display: none;
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  width: 350px;
+  max-width: 90%;
+  z-index: 1000;
+}
+
+.chat-header {
+  background-color: #1087ff;
+  color: #fff;
+  padding: 15px 20px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#close-btn {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.chat-box {
+  max-height: 350px;
+  overflow-y: auto;
+  padding: 15px 20px;
+}
+
+.chat-input {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  border-top: 1px solid #ddd;
+}
+
+#user-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+}
+
+#send-btn {
+  padding: 0px 0px;
+  border: none;
+  background-color: transparent;
+  # color: #fff;
+  #border-radius: 12px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.user-message {
+  background-color: #f3f3f3;
+  color: #333;
+  padding: 10px;
+  border-radius: 12px;
+  margin: 10px 0;
+  align-self: flex-end;
+}
+
+.bot-message {
+  background-color: #1087ff;
+  color: #fff;
+  padding: 10px;
+  border-radius: 12px;
+  margin: 10px 0;
+  align-self: flex-start;
+}
+</style>
+
+<script>
+const toggleBtn = document.getElementById("chatbot-toggle-btn");
+const popup = document.getElementById("chatbot-popup");
+const closeBtn = document.getElementById("close-btn");
+const chatBox = document.getElementById("chat-box");
+const userInput = document.getElementById("user-input");
+const sendBtn = document.getElementById("send-btn");
+
+// Abrir chat y añadir mensaje de bienvenida si es la primera vez
+toggleBtn.onclick = () => {
+    popup.style.display = "block";
+    if(chatBox.children.length === 0){
+        appendMessage(
+            "<em>ol jeje el bot sap respondre quant has gastat/ingressat en un periode de temps en concret i si vols tambe per categoria. espero que tigu. dw</em>",
+            "bot"
+        );
+    }
+};
+
+// Cerrar chat
+closeBtn.onclick = () => popup.style.display = "none";
+
+// Función para añadir mensajes al chat
+function appendMessage(msg, sender) {
+    const p = document.createElement("div");
+    p.className = sender === "user" ? "user-message" : "bot-message";
+
+    if(sender === "user") {
+        // Mensaje del usuario: solo texto plano, seguro
+        p.innerText = msg;
+    } else {
+        // Mensaje del bot: puede tener <br>, <em>, <strong>
+        msg = msg.replace(/\n/g, "<br>");
+        p.innerHTML = msg;
+    }
+
+    chatBox.appendChild(p);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Función para enviar mensaje del usuario y recibir respuesta del bot
+async function sendMessage() {
+    const question = userInput.value.trim();
+    if(!question) return;
+
+    appendMessage(question, "user");
+    userInput.value = "";
+
+    try {
+        const res = await fetch("{% url 'ask_agent' %}?q=" + encodeURIComponent(question));
+        const data = await res.json();
+
+        if(data.answer){
+            appendMessage(data.answer, "bot");
+        } else if(data.error){
+            appendMessage(data.error, "bot");
+
+            if(data.options){
+                appendMessage("Opciones: " + data.options.map(o => o.name).join(", "), "bot");
+            }
+        }
+    } catch(err){
+        appendMessage("Error de conexión", "bot");
+        console.error(err);
+    }
+}
+
+// Enviar mensaje al hacer click o pulsar Enter
+sendBtn.onclick = sendMessage;
+userInput.addEventListener("keypress", e => {
+    if(e.key === "Enter") sendMessage();
+});</script>

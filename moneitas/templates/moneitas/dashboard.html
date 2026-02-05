@@ -10,6 +10,7 @@
 
 {% block content %}
 
+
 <div style="text-align: center" class="main">
     <h1>{% translate "Financial Dashboard" %}</h1>
     <p class="btn-crear-pc">
@@ -78,10 +79,10 @@
         <div class="flip-card">
             <div class="flip-card-inner">
                 <div class="flip-card-front">
-                    
+
                         <h4>{% translate "Incomes" %}</h4>
                         <span id="paidIncomes">{{ paid_incomes }}</span> / {{ incomes }}
-                    
+
                 </div>
                 <div class="flip-card-back">
                         <h4>{% translate "Incomes" %}</h4>
@@ -129,13 +130,13 @@
                         <td class="clickable">{{ registro.label.name }}</td>
                         <td class="clickable">{{ registro.comment }}</td>
                         <td style="width: 2%;">
-                            
+
                             <div class="d-flex align-items-center">
                                 {% comment %} Payment Method {% endcomment %}
-                                <i class="payment-method"> 
-                                <i title="Payment method" 
+                                <i class="payment-method">
+                                <i title="Payment method"
                                     {% if registro.method == 'credit_card' %}
-                                    class="fa-regular fa-credit-card" 
+                                    class="fa-regular fa-credit-card"
                                     onclick="EditRegister('method', 'cash', 'financial_record', {{registro.id}})"
                                     {% else %}
                                     class="fa-solid fa-money-bill-1"
@@ -143,17 +144,17 @@
                                     {% endif%}>
                                 </i>
                             </i>
-                                                                
+
                                 {% comment %} Income paid? {% endcomment %}
                                 <input type="checkbox" class="form-check-input ms-4"
-                                title="Paid?" 
+                                title="Paid?"
                                 {% if registro.type == 'expense'%} style="visibility:hidden;" {% endif%}
-                                {% if registro.income_paid %}checked{% endif %} 
+                                {% if registro.income_paid %}checked{% endif %}
                                 onclick="EditRegister('income_paid', this.checked, 'financial_record', {{registro.id}});">
 
                                 {% comment %} Edit record {% endcomment %}
                                 <a class="fas fa-pencil ms-3" href="{% url 'create_record' edit=registro.id %}"></a>
-                                
+
                                 {% comment %} Invisible input to manage record deletion {% endcomment %}
                                 <input type="checkbox" name="delete_{{ registro.id }}" style="display:none" id="_delete" class="delete-checkbox">
 
@@ -166,7 +167,7 @@
         </table>
         </br>
         {% include 'moneitas/delete_pc_button.html' %}
-        
+
     </form>
 </div>
 </div>
@@ -174,11 +175,12 @@
 <a href="{% url 'create_record' %}" class="float btn-crear-phone">
     <i class="fa fa-plus my-float"></i>
   </a>
-  
+
 {% include 'moneitas/delete_button_phone.html' %}
 
 <script type="text/javascript" data-lang="{{ LANGUAGE_CODE }}" src="{% static 'moneitas/js/dashboard.js' %}"></script>
 <script type="text/javascript" data-lang="{{ LANGUAGE_CODE }}" data-formName="financial-records" src="{% static 'moneitas/js/list_common.js' %}"></script>
-
+{% include 'moneitas/chatbot.html' %}
 {% endblock %}
+
 

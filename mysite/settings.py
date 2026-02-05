@@ -33,6 +33,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*'] #what systems can talk to our server
 
+# Groq settings
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+GROQ_MODEL = "llama-3.3-70b-versatile"
 
 # Application definition
 

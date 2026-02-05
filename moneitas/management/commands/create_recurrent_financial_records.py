@@ -17,7 +17,7 @@ class Command(BaseCommand):
         recurrent_records = RecurrentRecord.objects.filter(
             Q(date_from__lte=today),
             Q(date_to__gte=today) | Q(date_to__isnull=True),
-            Q(next_create_date=today) | Q(next_create_date__isnull=True),
+            Q(next_create_date__lte=today) | Q(next_create_date__isnull=True),
             Q(last_created_date__lt=today) | Q(last_created_date__isnull=True)
         )
 
@@ -47,7 +47,7 @@ class Command(BaseCommand):
                 new_next_create_date = next_create_date
 
             # Create FinancialRecord if it's time
-            if next_create_date == today:
+            if next_create_date <= today:
                 created = FinancialRecord.objects.create(
                     type=recurrent_record.type,
                     amount=recurrent_record.amount,

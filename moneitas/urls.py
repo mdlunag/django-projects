@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.urls import path, include
 from . import views
+from . import groq_views
 from django.views.generic import TemplateView
 from rest_framework import routers
 from moneitas.views import TaskViewSet
@@ -45,5 +46,5 @@ urlpatterns = [
     path('api/get_financial_record/<int:record_id>/', views.get_financial_record, name='get_financial_record'),
     path('api/edit_recurrent_record/<int:record_id>/', views.edit_recurrent_record, name='edit_recurrent_record'),
     path('api/', include(router.urls)),
-
+    path('ask/', groq_views.ask_agent, name='ask_agent'),
 ]
